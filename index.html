@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body{font-family:Arial;margin:0;padding:10px;background:#fff}
+.event{padding:12px;border-bottom:1px solid #eee}
+.title{font-size:18px;font-weight:600}
+.date{color:#666;font-size:14px;margin-top:4px}
+a{text-decoration:none;color:black}
+a:hover{opacity:.7}
+</style>
+</head>
+<body>
+
+<div id="events">Loading events…</div>
+
+<script>
+fetch("https://fienta.com/api/v1/public/events?organizer=27119")
+.then(r=>r.json())
+.then(data=>{
+  const container=document.getElementById("events");
+  container.innerHTML="";
+  data.events.forEach(ev=>{
+    const div=document.createElement("div");
+    div.className="event";
+    div.innerHTML=`
+      <a href="${ev.url}" target="_blank">
+        <div class="title">${ev.title}</div>
+        <div class="date">${new Date(ev.start).toLocaleString()}</div>
+      </a>
+    `;
+    container.appendChild(div);
+  });
+});
+</script>
+
+</body>
+</html>
