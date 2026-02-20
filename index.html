@@ -96,7 +96,17 @@ body{
   color:#444;
 }
 
+.month-title{
+  font-size:28px;
+  margin:50px 0 20px;
+  font-weight:800;
+}
 
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  gap:32px;
+}
 </style>
 </head>
 
@@ -113,63 +123,79 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 
   const container=document.getElementById("events");
 
+  // sort events by date
   const events = data.events.sort((a,b)=>
     new Date(a.starts_at)-new Date(b.starts_at)
   );
 
-  container.innerHTML="";
+  // group by month
+  const grouped = {};
 
   events.forEach(ev=>{
+    const date = new Date(ev.starts_at);
+    const key = date.toLocaleString("default",{month:"long", year:"numeric"});
 
-    const start = new Date(ev.starts_at);
+    if(!grouped[key]) grouped[key]=[];
+    grouped[key].push(ev);
+  });
 
-    const date = start.toLocaleString(undefined,{
-      weekday:"short",
-      day:"numeric",
-      month:"short",
-      hour:"2-digit",
-      minute:"2-digit"
-    });
+  container.innerHTML="";
 
-    let countdown="";
-    const diff = start - new Date();
-    if(diff>0){
-      const days=Math.floor(diff/86400000);
-      const hours=Math.floor(diff/3600000)%24;
-      countdown=`Starts in ${days}d ${hours}h`;
-    }
+  // render months
+  Object.keys(grouped).forEach(month=>{
 
-    const soldOut = ev.sale_status !== "onSale";
+    const section=document.createElement("div");
 
-    const card=document.createElement("div");
-    card.className="card";
-
-    card.innerHTML=`
-
-      ${ev.image_url ? `<img src="${ev.image_url}" class="img">` : ""}
-
-      <div class="content">
-
-        <div class="title">${ev.title}</div>
-
-        <div class="meta">${date}</div>
-
-        ${ev.venue ? `<div class="meta">${ev.venue}</div>` : ""}
-
-        <div class="price">See tickets for price</div>
-
-        ${countdown ? `<div class="countdown">${countdown}</div>`:""}
-
-        ${soldOut ? `<div class="badge">Sold Out</div>`:""}
-
-        <a href="${ev.buy_tickets_url}" target="_blank" class="btn">
-          View Event
-        </a>
-
-      </div>
+    section.innerHTML=`
+      <h2 class="month-title">${month}</h2>
+      <div class="month-grid"></div>
     `;
 
-    container.appendChild(card);
+    container.appendChild(section);
+
+    const grid = section.querySelector(".month-grid");
+
+    grouped[month].forEach(ev=>{
+
+      const start = new Date(ev.starts_at);
+
+      const date = start.toLocaleString(undefined,{
+        weekday:"short",
+        day:"numeric",
+        month:"short",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+
+      let countdown="";
+      const diff = start - new Date();
+      if(diff>0){
+        const days=Math.floor(diff/86400000);
+        const hours=Math.floor(diff/3600000)%24;
+        countdown=`Starts in ${days}d ${hours}h`;
+      }
+
+      const soldOut = ev.sale_status !== "onSale";
+
+      const card=document.createElement("div");
+      card.className="card";
+
+      card.innerHTML=`
+        ${ev.image_url ? `<img src="${ev.image_url}" class="img">` : ""}
+        <div class="content">
+          <div class="title">${ev.title}</div>
+          <div class="meta">${date}</div>
+          ${ev.venue ? `<div class="meta">${ev.venue}</div>` : ""}
+          <div class="price">See tickets for price</div>
+          ${countdown ? `<div class="countdown">${countdown}</div>`:""}
+          ${soldOut ? `<div class="badge">Sold Out</div>`:""}
+          <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
   });
 
 });
