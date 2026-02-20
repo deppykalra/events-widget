@@ -12,9 +12,6 @@ body{
 }
 
 .container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
-  gap:32px;
   max-width:1200px;
   margin:auto;
 }
@@ -107,6 +104,10 @@ body{
   grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
   gap:32px;
 }
+  .month-section{
+  width:100%;
+  margin-bottom:60px;
+}
 </style>
 </head>
 
@@ -145,6 +146,7 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
   Object.keys(grouped).forEach(month=>{
 
     const section=document.createElement("div");
+    section.className="month-section";
 
     section.innerHTML=`
       <h2 class="month-title">${month}</h2>
