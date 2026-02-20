@@ -99,24 +99,20 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 
   const container=document.getElementById("events");
 
-  // sort by soonest event
   const events = data.events.sort((a,b)=>
-    new Date(a.start_datetime)-new Date(b.start_datetime)
+    new Date(a.start)-new Date(b.start)
   );
 
   container.innerHTML="";
 
   events.forEach(ev=>{
 
-    const start = ev.start_datetime
-      ? new Date(ev.start_datetime)
-      : null;
+    const start = ev.start ? new Date(ev.start) : null;
 
     const date = start
       ? start.toLocaleString()
       : "Date TBA";
 
-    // countdown
     let countdown="";
     if(start){
       const diff = start - new Date();
@@ -127,40 +123,26 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
       }
     }
 
-    // price
     let price="Free";
-    if(ev.price_from){
-      price=`From ${ev.price_from} ${ev.currency||""}`;
+    if(ev.min_price){
+      price=`From ${ev.min_price} ${ev.currency || ""}`;
     }
 
-    // sold out
-    const soldOut = ev.available===false || ev.status==="sold_out";
+    const soldOut = ev.available === false;
 
     const card=document.createElement("div");
     card.className="card";
 
     card.innerHTML=`
-
       ${ev.image ? `<img src="${ev.image}" class="img">` : ""}
-
       <div class="content">
-
         <div class="title">${ev.title}</div>
-
         <div class="meta">${date}</div>
-
-        ${ev.venue ? `<div class="meta">${ev.venue}</div>` : ""}
-
+        ${ev.location ? `<div class="meta">${ev.location}</div>` : ""}
         <div class="price">${price}</div>
-
         ${countdown ? `<div class="countdown">${countdown}</div>`:""}
-
         ${soldOut ? `<div class="badge">Sold Out</div>`:""}
-
-        <a href="${ev.url}" target="_blank" class="btn">
-          View Event
-        </a>
-
+        <a href="${ev.url}" target="_blank" class="btn">View Event</a>
       </div>
     `;
 
