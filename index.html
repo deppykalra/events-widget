@@ -100,49 +100,58 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
   const container=document.getElementById("events");
 
   const events = data.events.sort((a,b)=>
-    new Date(a.start)-new Date(b.start)
+    new Date(a.starts_at)-new Date(b.starts_at)
   );
 
   container.innerHTML="";
 
   events.forEach(ev=>{
 
-    const start = ev.start ? new Date(ev.start) : null;
+    const start = new Date(ev.starts_at);
 
-    const date = start
-      ? start.toLocaleString()
-      : "Date TBA";
+    const date = start.toLocaleString(undefined,{
+      weekday:"short",
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
 
     let countdown="";
-    if(start){
-      const diff = start - new Date();
-      if(diff>0){
-        const days=Math.floor(diff/86400000);
-        const hours=Math.floor(diff/3600000)%24;
-        countdown=`Starts in ${days}d ${hours}h`;
-      }
+    const diff = start - new Date();
+    if(diff>0){
+      const days=Math.floor(diff/86400000);
+      const hours=Math.floor(diff/3600000)%24;
+      countdown=`Starts in ${days}d ${hours}h`;
     }
 
-    let price="Free";
-    if(ev.min_price){
-      price=`From ${ev.min_price} ${ev.currency || ""}`;
-    }
-
-    const soldOut = ev.available === false;
+    const soldOut = ev.sale_status !== "onSale";
 
     const card=document.createElement("div");
     card.className="card";
 
     card.innerHTML=`
-      ${ev.image ? `<img src="${ev.image}" class="img">` : ""}
+
+      ${ev.image_url ? `<img src="${ev.image_url}" class="img">` : ""}
+
       <div class="content">
+
         <div class="title">${ev.title}</div>
+
         <div class="meta">${date}</div>
-        ${ev.location ? `<div class="meta">${ev.location}</div>` : ""}
-        <div class="price">${price}</div>
+
+        ${ev.venue ? `<div class="meta">${ev.venue}</div>` : ""}
+
+        <div class="price">See tickets for price</div>
+
         ${countdown ? `<div class="countdown">${countdown}</div>`:""}
+
         ${soldOut ? `<div class="badge">Sold Out</div>`:""}
-        <a href="${ev.url}" target="_blank" class="btn">View Event</a>
+
+        <a href="${ev.buy_tickets_url}" target="_blank" class="btn">
+          View Event
+        </a>
+
       </div>
     `;
 
