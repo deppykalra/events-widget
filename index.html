@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
- 
-  body{
+
+body{
   font-family:system-ui,-apple-system,sans-serif;
   background:#f4f6f8;
   margin:0;
@@ -19,6 +20,41 @@
   box-sizing:border-box;
 }
 
+/* UPCOMING BAR */
+#upcoming-bar{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:10px 6px 18px;
+  margin-bottom:20px;
+}
+
+.up-event{
+  min-width:70px;
+  background:#111;
+  color:white;
+  border-radius:10px;
+  text-align:center;
+  padding:10px 6px;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:.2s;
+}
+
+.up-event:hover{ background:#333; }
+
+.up-date{
+  font-weight:700;
+  font-size:18px;
+}
+
+.up-month{
+  font-size:12px;
+  opacity:.8;
+}
+
+/* CARDS */
+
 .card{
   background:white;
   border-radius:16px;
@@ -29,13 +65,8 @@
   height:100%;
   display:flex;
   flex-direction:column;
-   }
-.content{
-  padding:24px;
-  flex:1;
-  display:flex;
-  flex-direction:column;
 }
+
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 10px 26px rgba(0,0,0,.12);
@@ -49,19 +80,12 @@
 }
 
 .content{
-  padding:18px;
+  padding:24px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
 }
-.btn{
-  margin-top:auto;
-  display:block;
-  text-align:center;
-  padding:12px 16px;
-  background:black;
-  color:white;
-  border-radius:10px;
-  font-size:14px;
-  text-decoration:none;
-}
+
 .title{
   font-size:22px;
   font-weight:700;
@@ -96,6 +120,20 @@
   color:#444;
 }
 
+.btn{
+  margin-top:auto;
+  display:block;
+  text-align:center;
+  padding:12px 16px;
+  background:black;
+  color:white;
+  border-radius:10px;
+  font-size:14px;
+  text-decoration:none;
+}
+
+/* MONTH SECTIONS */
+
 .month-title{
   font-size:28px;
   margin:50px 0 20px;
@@ -107,24 +145,21 @@
   grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
   gap:32px;
 }
-  .month-section{
+
+.month-section{
   width:100%;
   margin-bottom:60px;
 }
 
-@media (max-width: 600px){
+/* MOBILE */
 
-  .month-grid{
-    display:block;
-  }
+@media (max-width:600px){
+
+  .month-grid{ display:block; }
 
   .card{
     width:100%;
     margin-bottom:22px;
-  }
-
-  .img{
-    aspect-ratio:16/9;
   }
 
   .month-title{
@@ -132,16 +167,15 @@
     margin:30px 0 14px;
   }
 
-  body{
-    padding:10px;
-  }
-
+  body{ padding:10px; }
 }
- 
+
 </style>
 </head>
 
 <body>
+
+<div id="upcoming-bar"></div>
 
 <div class="container" id="events">
 Loading events...
@@ -153,26 +187,52 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 .then(data=>{
 
   const container=document.getElementById("events");
+  const upcomingBar=document.getElementById("upcoming-bar");
 
-  // sort events by date
   const events = data.events.sort((a,b)=>
     new Date(a.starts_at)-new Date(b.starts_at)
   );
 
-  // group by month
-  const grouped = {};
+  /* UPCOMING BAR */
+
+  const upcoming = events
+    .filter(e => new Date(e.starts_at) > new Date())
+    .slice(0,10);
+
+  upcoming.forEach(ev=>{
+    const d=new Date(ev.starts_at);
+
+    const box=document.createElement("div");
+    box.className="up-event";
+
+    box.innerHTML=`
+      <div class="up-date">${d.getDate()}</div>
+      <div class="up-month">
+        ${d.toLocaleString("default",{month:"short"})}
+      </div>
+    `;
+
+    box.onclick=()=>{
+      document.querySelector(`[data-id="${ev.id}"]`)
+        ?.scrollIntoView({behavior:"smooth"});
+    };
+
+    upcomingBar.appendChild(box);
+  });
+
+  /* GROUP BY MONTH */
+
+  const grouped={};
 
   events.forEach(ev=>{
-    const date = new Date(ev.starts_at);
-    const key = date.toLocaleString("default",{month:"long", year:"numeric"});
-
+    const date=new Date(ev.starts_at);
+    const key=date.toLocaleString("default",{month:"long",year:"numeric"});
     if(!grouped[key]) grouped[key]=[];
     grouped[key].push(ev);
   });
 
   container.innerHTML="";
 
-  // render months
   Object.keys(grouped).forEach(month=>{
 
     const section=document.createElement("div");
@@ -185,13 +245,13 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 
     container.appendChild(section);
 
-    const grid = section.querySelector(".month-grid");
+    const grid=section.querySelector(".month-grid");
 
     grouped[month].forEach(ev=>{
 
-      const start = new Date(ev.starts_at);
+      const start=new Date(ev.starts_at);
 
-      const date = start.toLocaleString(undefined,{
+      const date=start.toLocaleString(undefined,{
         weekday:"short",
         day:"numeric",
         month:"short",
@@ -200,17 +260,18 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
       });
 
       let countdown="";
-      const diff = start - new Date();
+      const diff=start-new Date();
       if(diff>0){
         const days=Math.floor(diff/86400000);
         const hours=Math.floor(diff/3600000)%24;
         countdown=`Starts in ${days}d ${hours}h`;
       }
 
-      const soldOut = ev.sale_status !== "onSale";
+      const soldOut=ev.sale_status!=="onSale";
 
       const card=document.createElement("div");
       card.className="card";
+      card.dataset.id=ev.id;
 
       card.innerHTML=`
         ${ev.image_url ? `<img src="${ev.image_url}" class="img">` : ""}
