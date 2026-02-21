@@ -384,7 +384,6 @@ Object.keys(grouped).forEach(month=>{
         <div class="title">${ev.title}</div>
         <div class="meta">${date}</div>
         ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
-        <div class="price">See tickets for price</div>
         ${countdown?`<div class="countdown">${countdown}</div>`:""}
         ${soldOut?`<div class="badge">Sold Out</div>`:""}
         <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
