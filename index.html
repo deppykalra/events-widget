@@ -170,12 +170,55 @@ body{
   body{ padding:10px; }
 }
 
+  .upcoming-wrapper{
+  background:white;
+  border-radius:14px;
+  padding:14px 12px 6px;
+  margin-bottom:26px;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+
+.upcoming-title{
+  font-weight:700;
+  font-size:16px;
+  margin-bottom:10px;
+}
+
+.up-event{
+  min-width:72px;
+  background:#111;
+  color:white;
+  border-radius:12px;
+  text-align:center;
+  padding:10px 6px;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:.2s;
+}
+
+.up-event.active{
+  background:#ffd000;
+  color:black;
+}
+
+.up-date{
+  font-weight:800;
+  font-size:18px;
+}
+
+.up-month{
+  font-size:11px;
+  opacity:.8;
+}
 </style>
 </head>
 
 <body>
 
-<div id="upcoming-bar"></div>
+<div class="upcoming-wrapper">
+  <div class="upcoming-title">Upcoming Events</div>
+  <div id="upcoming-bar"></div>
+</div>
 
 <div class="container" id="events">
 Loading events...
@@ -212,11 +255,16 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
       </div>
     `;
 
-    box.onclick=()=>{
-      document.querySelector(`[data-id="${ev.id}"]`)
-        ?.scrollIntoView({behavior:"smooth"});
-    };
+box.onclick=()=>{
 
+  document.querySelectorAll(".up-event")
+    .forEach(e=>e.classList.remove("active"));
+
+  box.classList.add("active");
+
+  document.querySelector(`[data-id="${ev.id}"]`)
+    ?.scrollIntoView({behavior:"smooth"});
+};
     upcomingBar.appendChild(box);
   });
 
