@@ -317,22 +317,45 @@ fetch("https://fienta.com/api/v1/public/events?organizer=27119")
     const box=document.createElement("div");
     box.className="up-event";
 
-    box.innerHTML=`
-      <div class="up-date">${d.getDate()}</div>
-      <div class="up-month">
-        ${d.toLocaleString("default",{month:"short"})}
-      </div>
-    `;
+box.innerHTML = `
+  <div style="font-size:11px;opacity:.7">
+    ${d.toLocaleString("default",{weekday:"short"})}
+  </div>
+  <div class="up-date">${d.getDate()}</div>
+  <div class="up-month">
+    ${d.toLocaleString("default",{month:"short"})}
+  </div>
+`;
 
-box.onclick=()=>{
+    const upcomingMap = new Map();
+
+events.forEach(ev=>{
+  const d = new Date(ev.starts_at);
+
+  if(d > new Date()){
+    const key = d.toDateString();
+
+    if(!upcomingMap.has(key)){
+      upcomingMap.set(key, ev);
+    }
+  }
+});
+
+const upcoming = Array.from(upcomingMap.values()).slice(0,10);
+
+box.onclick = () => {
 
   document.querySelectorAll(".up-event")
     .forEach(e=>e.classList.remove("active"));
 
   box.classList.add("active");
 
-  document.querySelector(`[data-id="${ev.id}"]`)
-    ?.scrollIntoView({behavior:"smooth"});
+  const el = document.querySelector(`[data-id="${ev.id}"]`);
+
+  if(el){
+    const y = el.getBoundingClientRect().top + window.scrollY - 120;
+    window.scrollTo({ top:y, behavior:"smooth" });
+  }
 };
     upcomingBar.appendChild(box);
   });
