@@ -6,6 +6,8 @@
 
 <style>
 
+/* BASE */
+
 body{
   font-family:system-ui,-apple-system,sans-serif;
   background:#f4f6f8;
@@ -15,191 +17,11 @@ body{
 
 .container{
   width:100%;
-  max-width:none;
   padding:0 16px;
   box-sizing:border-box;
 }
 
 /* UPCOMING BAR */
-#upcoming-bar{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding:10px 6px 18px;
-  margin-bottom:20px;
-}
-
-.up-event{
-  min-width:70px;
-  background:#111;
-  color:white;
-  border-radius:10px;
-  text-align:center;
-  padding:10px 6px;
-  cursor:pointer;
-  flex-shrink:0;
-  transition:.2s;
-}
-
-.up-event:hover{ background:#333; }
-
-.up-date{
-  font-weight:700;
-  font-size:18px;
-}
-
-.up-month{
-  font-size:12px;
-  opacity:.8;
-}
-
-/* CARDS */
-
-.card{
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-  transition:.2s;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-}
-
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 26px rgba(0,0,0,.12);
-}
-
-.img{
-  width:100%;
-  aspect-ratio:16/9;
-  object-fit:cover;
-  display:block;
-}
-
-.content{
-  padding:24px;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
-.title{
-  font-size:22px;
-  font-weight:700;
-  line-height:1.25;
-  margin-bottom:10px;
-}
-
-.meta{
-  color:#666;
-  font-size:14px;
-  margin-bottom:6px;
-}
-
-.price{
-  font-weight:600;
-  margin-top:6px;
-}
-
-.badge{
-  display:inline-block;
-  padding:4px 8px;
-  background:#ff4d4f;
-  color:white;
-  font-size:12px;
-  border-radius:6px;
-  margin-top:8px;
-}
-
-.countdown{
-  font-size:13px;
-  margin-top:6px;
-  color:#444;
-}
-
-.btn{
-  margin-top:auto;
-  display:block;
-  text-align:center;
-  padding:12px 16px;
-  background:black;
-  color:white;
-  border-radius:10px;
-  font-size:14px;
-  text-decoration:none;
-}
-
-/* MONTH SECTIONS */
-
-.month-title{
-  font-size:28px;
-  margin:50px 0 20px;
-  font-weight:800;
-}
-
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-  gap:32px;
-}
-
-.month-section{
-  width:100%;
-  margin-bottom:60px;
-}
-
-  /* SHRINK ON SCROLL */
-
-.upcoming-wrapper{
-  transition:all .28s ease;
-}
-
-.upcoming-wrapper.shrink{
-  padding:6px 10px 4px;
-  border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.upcoming-wrapper.shrink .upcoming-title{
-  font-size:13px;
-}
-
-.upcoming-wrapper.shrink .up-event{
-  min-width:54px;
-  padding:6px 4px;
-}
-
-.upcoming-wrapper.shrink .up-date{
-  font-size:14px;
-}
-
-.upcoming-wrapper.shrink .up-month{
-  font-size:9px;
-}
-
-/* MOBILE */
-
-@media (max-width:600px){
-  .upcoming-sub{ display:none; }
-  .month-grid{ display:block; }
-
-  .card{
-    width:100%;
-    margin-bottom:22px;
-  }
-
-  .month-title{
-    font-size:22px;
-    margin:30px 0 14px;
-  }
-
-  body{ padding:10px; }
-}
-
- /* PREMIUM UPCOMING BAR */
 
 .upcoming-wrapper{
   background:white;
@@ -210,6 +32,7 @@ body{
   position:sticky;
   top:6px;
   z-index:5;
+  transition:all .28s cubic-bezier(.4,0,.2,1);
 }
 
 .upcoming-header{
@@ -233,14 +56,13 @@ body{
   position:relative;
 }
 
-/* fade edges */
 .upcoming-scroll::before,
 .upcoming-scroll::after{
   content:"";
   position:absolute;
   top:0;
   bottom:0;
-  width:24px;
+  width:20px;
   pointer-events:none;
   z-index:2;
 }
@@ -263,9 +85,7 @@ body{
   scroll-snap-type:x mandatory;
 }
 
-#upcoming-bar::-webkit-scrollbar{
-  display:none;
-}
+#upcoming-bar::-webkit-scrollbar{ display:none; }
 
 /* DATE PILLS */
 
@@ -282,9 +102,7 @@ body{
   transform:scale(.98);
 }
 
-.up-event:active{
-  transform:scale(.92);
-}
+.up-event:active{ transform:scale(.92); }
 
 .up-event.active{
   background:#ffd000;
@@ -302,6 +120,132 @@ body{
   margin-top:2px;
   opacity:.85;
 }
+
+/* CARDS */
+
+.card{
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 26px rgba(0,0,0,.12);
+}
+
+.img{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+}
+
+.content{
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.title{
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.meta{
+  color:#666;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.price{ font-weight:600; }
+
+.countdown{
+  font-size:13px;
+  margin-top:6px;
+  color:#444;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  background:#ff4d4f;
+  color:white;
+  font-size:12px;
+  border-radius:6px;
+  margin-top:8px;
+}
+
+.btn{
+  margin-top:auto;
+  display:block;
+  text-align:center;
+  padding:12px;
+  background:black;
+  color:white;
+  border-radius:10px;
+  text-decoration:none;
+  font-size:14px;
+}
+
+/* MONTHS */
+
+.month-title{
+  font-size:28px;
+  margin:50px 0 20px;
+  font-weight:800;
+}
+
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  gap:32px;
+}
+
+.month-section{
+  margin-bottom:60px;
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+  body{ padding:10px; }
+
+  .month-grid{ display:block; }
+
+  .card{ margin-bottom:22px; }
+
+  .month-title{
+    font-size:22px;
+    margin:30px 0 14px;
+  }
+
+  .upcoming-sub{ display:none; }
+
+  /* SHRINK ONLY MOBILE */
+
+  .upcoming-wrapper.shrink{
+    padding:6px 10px 4px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+
+  .upcoming-wrapper.shrink .up-event{
+    min-width:54px;
+    padding:6px 4px;
+  }
+
+  .upcoming-wrapper.shrink .up-date{ font-size:14px; }
+  .upcoming-wrapper.shrink .up-month{ font-size:9px; }
+}
+
 </style>
 </head>
 
@@ -318,162 +262,151 @@ body{
   </div>
 </div>
 
-<div class="container" id="events">
-Loading events...
-</div>
+<div class="container" id="events">Loading events...</div>
 
 <script>
 fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 .then(r=>r.json())
 .then(data=>{
 
-  const container=document.getElementById("events");
-  const upcomingBar=document.getElementById("upcoming-bar");
+const container=document.getElementById("events");
+const upcomingBar=document.getElementById("upcoming-bar");
 
-  const events = data.events.sort((a,b)=>
-    new Date(a.starts_at)-new Date(b.starts_at)
-  );
+const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
 
-  /* UPCOMING BAR */
+/* UNIQUE UPCOMING DAYS */
 
-  const upcoming = events
-    .filter(e => new Date(e.starts_at) > new Date())
-    .slice(0,10);
-
-  upcoming.forEach(ev=>{
-    const d=new Date(ev.starts_at);
-
-    const box=document.createElement("div");
-    box.className="up-event";
-
-box.innerHTML = `
-  <div style="font-size:11px;opacity:.7">
-    ${d.toLocaleString("default",{weekday:"short"})}
-  </div>
-  <div class="up-date">${d.getDate()}</div>
-  <div class="up-month">
-    ${d.toLocaleString("default",{month:"short"})}
-  </div>
-`;
-
-    const upcomingMap = new Map();
+const map=new Map();
 
 events.forEach(ev=>{
-  const d = new Date(ev.starts_at);
-
-  if(d > new Date()){
-    const key = d.toDateString();
-
-    if(!upcomingMap.has(key)){
-      upcomingMap.set(key, ev);
-    }
+  const d=new Date(ev.starts_at);
+  if(d>new Date()){
+    const key=d.toDateString();
+    if(!map.has(key)) map.set(key,ev);
   }
 });
 
-const upcoming = Array.from(upcomingMap.values()).slice(0,10);
+const upcoming=[...map.values()].slice(0,10);
 
-box.onclick = () => {
+let first=true;
 
-  document.querySelectorAll(".up-event")
-    .forEach(e=>e.classList.remove("active"));
+upcoming.forEach(ev=>{
+  const d=new Date(ev.starts_at);
 
-  box.classList.add("active");
+  const box=document.createElement("div");
+  box.className="up-event";
 
-  const el = document.querySelector(`[data-id="${ev.id}"]`);
-
-  if(el){
-    const y = el.getBoundingClientRect().top + window.scrollY - 120;
-    window.scrollTo({ top:y, behavior:"smooth" });
+  if(first){
+    box.classList.add("active");
+    first=false;
   }
-};
-    upcomingBar.appendChild(box);
-  });
 
-  /* GROUP BY MONTH */
+  box.innerHTML=`
+    <div style="font-size:11px;opacity:.7">
+      ${d.toLocaleString("default",{weekday:"short"})}
+    </div>
+    <div class="up-date">${d.getDate()}</div>
+    <div class="up-month">
+      ${d.toLocaleString("default",{month:"short"})}
+    </div>
+  `;
 
-  const grouped={};
+  box.onclick=()=>{
+    document.querySelectorAll(".up-event").forEach(e=>e.classList.remove("active"));
+    box.classList.add("active");
 
-  events.forEach(ev=>{
-    const date=new Date(ev.starts_at);
-    const key=date.toLocaleString("default",{month:"long",year:"numeric"});
-    if(!grouped[key]) grouped[key]=[];
-    grouped[key].push(ev);
-  });
+    const el=document.querySelector(`[data-id="${ev.id}"]`);
+    if(el){
+      const offset=document.querySelector(".upcoming-wrapper").offsetHeight+10;
+      const y=el.getBoundingClientRect().top+window.scrollY-offset;
+      window.scrollTo({top:y,behavior:"smooth"});
+    }
+  };
 
-  container.innerHTML="";
+  upcomingBar.appendChild(box);
+});
 
-  Object.keys(grouped).forEach(month=>{
+/* GROUP BY MONTH */
 
-    const section=document.createElement("div");
-    section.className="month-section";
+const grouped={};
 
-    section.innerHTML=`
-      <h2 class="month-title">${month}</h2>
-      <div class="month-grid"></div>
-    `;
+events.forEach(ev=>{
+  const d=new Date(ev.starts_at);
+  const key=d.toLocaleString("default",{month:"long",year:"numeric"});
+  if(!grouped[key]) grouped[key]=[];
+  grouped[key].push(ev);
+});
 
-    container.appendChild(section);
+container.innerHTML="";
 
-    const grid=section.querySelector(".month-grid");
+Object.keys(grouped).forEach(month=>{
 
-    grouped[month].forEach(ev=>{
+  const section=document.createElement("div");
+  section.className="month-section";
 
-      const start=new Date(ev.starts_at);
+  section.innerHTML=`
+    <h2 class="month-title">${month}</h2>
+    <div class="month-grid"></div>
+  `;
 
-      const date=start.toLocaleString(undefined,{
-        weekday:"short",
-        day:"numeric",
-        month:"short",
-        hour:"2-digit",
-        minute:"2-digit"
-      });
+  container.appendChild(section);
+  const grid=section.querySelector(".month-grid");
 
-      let countdown="";
-      const diff=start-new Date();
-      if(diff>0){
-        const days=Math.floor(diff/86400000);
-        const hours=Math.floor(diff/3600000)%24;
-        countdown=`Starts in ${days}d ${hours}h`;
-      }
+  grouped[month].forEach(ev=>{
 
-      const soldOut=ev.sale_status!=="onSale";
+    const start=new Date(ev.starts_at);
 
-      const card=document.createElement("div");
-      card.className="card";
-      card.dataset.id=ev.id;
-
-      card.innerHTML=`
-        ${ev.image_url ? `<img src="${ev.image_url}" class="img">` : ""}
-        <div class="content">
-          <div class="title">${ev.title}</div>
-          <div class="meta">${date}</div>
-          ${ev.venue ? `<div class="meta">${ev.venue}</div>` : ""}
-          <div class="price">See tickets for price</div>
-          ${countdown ? `<div class="countdown">${countdown}</div>`:""}
-          ${soldOut ? `<div class="badge">Sold Out</div>`:""}
-          <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
-        </div>
-      `;
-
-      grid.appendChild(card);
+    const date=start.toLocaleString(undefined,{
+      weekday:"short",
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
     });
 
-  });
+    let countdown="";
+    const diff=start-new Date();
+    if(diff>0){
+      const days=Math.floor(diff/86400000);
+      const hours=Math.floor(diff/3600000)%24;
+      countdown=`Starts in ${days}d ${hours}h`;
+    }
 
+    const soldOut=ev.sale_status!=="onSale";
+
+    const card=document.createElement("div");
+    card.className="card";
+    card.dataset.id=ev.id;
+
+    card.innerHTML=`
+      ${ev.image_url?`<img src="${ev.image_url}" class="img">`:""}
+      <div class="content">
+        <div class="title">${ev.title}</div>
+        <div class="meta">${date}</div>
+        ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
+        <div class="price">See tickets for price</div>
+        ${countdown?`<div class="countdown">${countdown}</div>`:""}
+        ${soldOut?`<div class="badge">Sold Out</div>`:""}
+        <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+});
 });
 </script>
+
 <script>
+const bar=document.querySelector(".upcoming-wrapper");
 
-const bar = document.querySelector(".upcoming-wrapper");
-
-window.addEventListener("scroll", () => {
-  if(window.scrollY > 60){
-    bar.classList.add("shrink");
-  } else {
-    bar.classList.remove("shrink");
+window.addEventListener("scroll",()=>{
+  if(window.innerWidth<=600){
+    window.scrollY>60 ? bar.classList.add("shrink")
+                      : bar.classList.remove("shrink");
   }
 });
-
 </script>
+
 </body>
 </html>
