@@ -170,45 +170,108 @@ body{
   body{ padding:10px; }
 }
 
-  .upcoming-wrapper{
+ /* PREMIUM UPCOMING BAR */
+
+.upcoming-wrapper{
   background:white;
-  border-radius:14px;
-  padding:14px 12px 6px;
-  margin-bottom:26px;
-  box-shadow:0 4px 14px rgba(0,0,0,.06);
+  border-radius:18px;
+  padding:16px 14px 10px;
+  margin-bottom:28px;
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+  position:sticky;
+  top:10px;
+  z-index:5;
+}
+
+.upcoming-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
 }
 
 .upcoming-title{
-  font-weight:700;
-  font-size:16px;
-  margin-bottom:10px;
+  font-size:17px;
+  font-weight:800;
 }
 
+.upcoming-sub{
+  font-size:12px;
+  color:#777;
+}
+
+.upcoming-scroll{
+  position:relative;
+}
+
+/* fade edges */
+.upcoming-scroll::before,
+.upcoming-scroll::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:24px;
+  pointer-events:none;
+  z-index:2;
+}
+
+.upcoming-scroll::before{
+  left:0;
+  background:linear-gradient(to right, white, transparent);
+}
+
+.upcoming-scroll::after{
+  right:0;
+  background:linear-gradient(to left, white, transparent);
+}
+
+#upcoming-bar{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  scroll-snap-type:x mandatory;
+}
+
+#upcoming-bar::-webkit-scrollbar{
+  display:none;
+}
+
+/* DATE PILLS */
+
 .up-event{
-  min-width:72px;
+  scroll-snap-align:start;
+  min-width:78px;
+  border-radius:14px;
   background:#111;
   color:white;
-  border-radius:12px;
   text-align:center;
-  padding:10px 6px;
+  padding:12px 8px;
   cursor:pointer;
-  flex-shrink:0;
-  transition:.2s;
+  transition:.18s;
+  transform:scale(.98);
+}
+
+.up-event:active{
+  transform:scale(.92);
 }
 
 .up-event.active{
   background:#ffd000;
   color:black;
+  transform:scale(1);
 }
 
 .up-date{
+  font-size:20px;
   font-weight:800;
-  font-size:18px;
 }
 
 .up-month{
   font-size:11px;
-  opacity:.8;
+  margin-top:2px;
+  opacity:.85;
 }
 </style>
 </head>
@@ -216,8 +279,14 @@ body{
 <body>
 
 <div class="upcoming-wrapper">
-  <div class="upcoming-title">Upcoming Events</div>
-  <div id="upcoming-bar"></div>
+  <div class="upcoming-header">
+    <div class="upcoming-title">Upcoming Events</div>
+    <div class="upcoming-sub">Tap a date</div>
+  </div>
+
+  <div class="upcoming-scroll">
+    <div id="upcoming-bar"></div>
+  </div>
 </div>
 
 <div class="container" id="events">
