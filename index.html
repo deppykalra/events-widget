@@ -364,14 +364,6 @@ Object.keys(grouped).forEach(month=>{
       minute:"2-digit"
     });
 
-    let countdown="";
-    const diff=start-new Date();
-    if(diff>0){
-      const days=Math.floor(diff/86400000);
-      const hours=Math.floor(diff/3600000)%24;
-      countdown=`Starts in ${days}d ${hours}h`;
-    }
-
     const soldOut=ev.sale_status!=="onSale";
 
     const card=document.createElement("div");
@@ -384,7 +376,6 @@ Object.keys(grouped).forEach(month=>{
         <div class="title">${ev.title}</div>
         <div class="meta">${date}</div>
         ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
-        ${countdown?`<div class="countdown">${countdown}</div>`:""}
         ${soldOut?`<div class="badge">Sold Out</div>`:""}
         <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
       </div>
