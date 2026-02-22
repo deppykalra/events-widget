@@ -43,7 +43,6 @@ body{
   overflow-x:auto;
   padding:8px 2px 4px;
 }
-
 .filters::-webkit-scrollbar{ display:none; }
 
 .filter-btn{
@@ -56,12 +55,10 @@ body{
   white-space:nowrap;
   transition:.18s;
 }
-
 .filter-btn.active{
   background:#111;
   color:white;
 }
-
 .filter-btn:active{ transform:scale(.94); }
 
 /* HEADER */
@@ -117,7 +114,6 @@ body{
   padding-bottom:6px;
   scroll-snap-type:x mandatory;
 }
-
 #upcoming-bar::-webkit-scrollbar{ display:none; }
 
 /* DATE PILLS */
@@ -134,7 +130,6 @@ body{
   transition:.18s;
   transform:scale(.98);
 }
-
 .up-event:active{ transform:scale(.92); }
 
 .up-event.active{
@@ -147,7 +142,6 @@ body{
   font-size:16px;
   font-weight:800;
 }
-
 .up-month{
   font-size:10px;
   margin-top:2px;
@@ -165,6 +159,10 @@ body{
   transition:.2s;
   display:flex;
   flex-direction:column;
+
+  /* FIX ADDED */
+  max-width:520px;
+  width:100%;
 }
 
 .card:hover{
@@ -236,10 +234,13 @@ body{
   font-weight:800;
 }
 
+/* FIXED GRID */
+
 .month-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
   gap:32px;
+  justify-content:start;
 }
 
 .month-section{
@@ -311,8 +312,6 @@ const filtersBar=document.getElementById("filters");
 
 const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
 
-/* CATEGORY DETECTION */
-
 function detectCategory(ev){
   const t=(ev.title+" "+(ev.venue||"")).toLowerCase();
   if(t.includes("workshop")) return "workshop";
@@ -323,11 +322,8 @@ function detectCategory(ev){
 
 events.forEach(e=>e.category=detectCategory(e));
 
-/* BUILD FILTERS */
-
 const counts={};
 events.forEach(e=>counts[e.category]=(counts[e.category]||0)+1);
-
 const categories=["all",...Object.keys(counts)];
 
 filtersBar.innerHTML=categories.map(cat=>{
@@ -337,8 +333,6 @@ filtersBar.innerHTML=categories.map(cat=>{
             ${label} (${count})
           </button>`;
 }).join("");
-
-/* FILTER CLICK */
 
 filtersBar.onclick=e=>{
   if(!e.target.classList.contains("filter-btn")) return;
