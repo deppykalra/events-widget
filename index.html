@@ -42,8 +42,24 @@ body{
   gap:8px;
   overflow-x:auto;
   padding:8px 2px 4px;
+  position:relative;
 }
 .filters::-webkit-scrollbar{ display:none; }
+
+/* fade indicator */
+
+.filters::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  width:34px;
+  pointer-events:none;
+  background:linear-gradient(to left, white, transparent);
+  opacity:var(--fade,1);
+  transition:.2s;
+}
 
 .filter-btn{
   border:none;
@@ -55,10 +71,12 @@ body{
   white-space:nowrap;
   transition:.18s;
 }
+
 .filter-btn.active{
   background:#111;
   color:white;
 }
+
 .filter-btn:active{ transform:scale(.94); }
 
 /* HEADER */
@@ -159,8 +177,6 @@ body{
   transition:.2s;
   display:flex;
   flex-direction:column;
-
-  /* FIX ADDED */
   max-width:520px;
   width:100%;
 }
@@ -233,8 +249,6 @@ body{
   margin:50px 0 20px;
   font-weight:800;
 }
-
-/* FIXED GRID */
 
 .month-grid{
   display:grid;
@@ -334,11 +348,24 @@ filtersBar.innerHTML=categories.map(cat=>{
           </button>`;
 }).join("");
 
+/* hide fade if no overflow */
+
+requestAnimationFrame(()=>{
+  if(filtersBar.scrollWidth <= filtersBar.clientWidth){
+    filtersBar.style.setProperty("--fade","0");
+  }
+});
+
+/* FILTER CLICK */
+
 filtersBar.onclick=e=>{
   if(!e.target.classList.contains("filter-btn")) return;
 
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   e.target.classList.add("active");
+
+  /* auto center button */
+  e.target.scrollIntoView({inline:"center",behavior:"smooth"});
 
   const f=e.target.dataset.filter;
 
