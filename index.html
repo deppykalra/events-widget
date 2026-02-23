@@ -400,16 +400,16 @@ upcoming.forEach(ev=>{
 
   const day=new Date(d); day.setHours(0,0,0,0);
 
-  let top=d.toLocaleString("default",{weekday:"short"});
-  let mid=d.getDate();
-  let bot=d.toLocaleString("default",{month:"short"});
+let top=d.toLocaleString("default",{weekday:"short"});
+let mid=d.getDate();
+let bot=d.toLocaleString("default",{month:"short"});
 
-  if(day.getTime()===today.getTime()){
-    top="Today"; mid=""; bot="";
-  }
-  else if(day.getTime()===tomorrow.getTime()){
-    top="Tomorrow"; mid=""; bot="";
-  }
+if(day.getTime()===today.getTime()){
+  top="Today";
+}
+else if(day.getTime()===tomorrow.getTime()){
+  top="Tomorrow";
+}
 
   if(day.getTime()===today.getTime()){
     box.classList.add("active");
