@@ -46,8 +46,6 @@ body{
 }
 .filters::-webkit-scrollbar{ display:none; }
 
-/* fade indicator */
-
 .filters::after{
   content:"";
   position:absolute;
@@ -326,6 +324,8 @@ const filtersBar=document.getElementById("filters");
 
 const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
 
+/* CATEGORY */
+
 function detectCategory(ev){
   const t=(ev.title+" "+(ev.venue||"")).toLowerCase();
   if(t.includes("workshop")) return "workshop";
@@ -333,8 +333,9 @@ function detectCategory(ev){
   if(t.includes("comedy")) return "comedy";
   return "other";
 }
-
 events.forEach(e=>e.category=detectCategory(e));
+
+/* FILTERS */
 
 const counts={};
 events.forEach(e=>counts[e.category]=(counts[e.category]||0)+1);
@@ -348,23 +349,16 @@ filtersBar.innerHTML=categories.map(cat=>{
           </button>`;
 }).join("");
 
-/* hide fade if no overflow */
-
 requestAnimationFrame(()=>{
-  if(filtersBar.scrollWidth <= filtersBar.clientWidth){
+  if(filtersBar.scrollWidth<=filtersBar.clientWidth)
     filtersBar.style.setProperty("--fade","0");
-  }
 });
-
-/* FILTER CLICK */
 
 filtersBar.onclick=e=>{
   if(!e.target.classList.contains("filter-btn")) return;
 
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   e.target.classList.add("active");
-
-  /* auto center button */
   e.target.scrollIntoView({inline:"center",behavior:"smooth"});
 
   const f=e.target.dataset.filter;
@@ -384,7 +378,6 @@ filtersBar.onclick=e=>{
 /* UPCOMING DAYS */
 
 const map=new Map();
-
 events.forEach(ev=>{
   const d=new Date(ev.starts_at);
   if(d>new Date()){
@@ -396,6 +389,8 @@ events.forEach(ev=>{
 const upcoming=[...map.values()].slice(0,21);
 
 let first=true;
+const today=new Date(); today.setHours(0,0,0,0);
+const tomorrow=new Date(today); tomorrow.setDate(today.getDate()+1);
 
 upcoming.forEach(ev=>{
   const d=new Date(ev.starts_at);
@@ -403,19 +398,31 @@ upcoming.forEach(ev=>{
   const box=document.createElement("div");
   box.className="up-event";
 
-  if(first){
+  const day=new Date(d); day.setHours(0,0,0,0);
+
+  let top=d.toLocaleString("default",{weekday:"short"});
+  let mid=d.getDate();
+  let bot=d.toLocaleString("default",{month:"short"});
+
+  if(day.getTime()===today.getTime()){
+    top="Today"; mid=""; bot="";
+  }
+  else if(day.getTime()===tomorrow.getTime()){
+    top="Tomorrow"; mid=""; bot="";
+  }
+
+  if(day.getTime()===today.getTime()){
+    box.classList.add("active");
+    first=false;
+  } else if(first){
     box.classList.add("active");
     first=false;
   }
 
   box.innerHTML=`
-    <div style="font-size:11px;opacity:.7">
-      ${d.toLocaleString("default",{weekday:"short"})}
-    </div>
-    <div class="up-date">${d.getDate()}</div>
-    <div class="up-month">
-      ${d.toLocaleString("default",{month:"short"})}
-    </div>
+    <div style="font-size:11px;opacity:.7">${top}</div>
+    ${mid?`<div class="up-date">${mid}</div>`:""}
+    ${bot?`<div class="up-month">${bot}</div>`:""}
   `;
 
   box.onclick=()=>{
@@ -436,7 +443,6 @@ upcoming.forEach(ev=>{
 /* GROUP BY MONTH */
 
 const grouped={};
-
 events.forEach(ev=>{
   const d=new Date(ev.starts_at);
   const key=d.toLocaleString("default",{month:"long",year:"numeric"});
@@ -447,28 +453,18 @@ events.forEach(ev=>{
 container.innerHTML="";
 
 Object.keys(grouped).forEach(month=>{
-
   const section=document.createElement("div");
   section.className="month-section";
-
-  section.innerHTML=`
-    <h2 class="month-title">${month}</h2>
-    <div class="month-grid"></div>
-  `;
-
+  section.innerHTML=`<h2 class="month-title">${month}</h2><div class="month-grid"></div>`;
   container.appendChild(section);
+
   const grid=section.querySelector(".month-grid");
 
   grouped[month].forEach(ev=>{
-
     const start=new Date(ev.starts_at);
 
     const date=start.toLocaleString(undefined,{
-      weekday:"short",
-      day:"numeric",
-      month:"short",
-      hour:"2-digit",
-      minute:"2-digit"
+      weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"
     });
 
     const soldOut=ev.sale_status!=="onSale";
@@ -497,11 +493,9 @@ Object.keys(grouped).forEach(month=>{
 
 <script>
 const bar=document.querySelector(".upcoming-wrapper");
-
 window.addEventListener("scroll",()=>{
   if(window.innerWidth<=600){
-    window.scrollY>60 ? bar.classList.add("shrink")
-                      : bar.classList.remove("shrink");
+    window.scrollY>60?bar.classList.add("shrink"):bar.classList.remove("shrink");
   }
 });
 </script>
