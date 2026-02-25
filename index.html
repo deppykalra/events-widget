@@ -26,13 +26,16 @@ body{
 .upcoming-wrapper{
   background:white;
   border-radius:14px;
-  padding:10px 12px 6px;
+  padding:10px 16px 6px;
+
+  margin-left:-16px;
+  margin-right:-16px;
+
   margin-bottom:14px;
   box-shadow:0 4px 14px rgba(0,0,0,.06);
   position:sticky;
   top:6px;
   z-index:5;
-  transition:all .28s cubic-bezier(.4,0,.2,1);
 }
 
 /* FILTER BAR */
@@ -170,6 +173,10 @@ body{
 
 @media(max-width:600px){
   .month-grid{display:block;}
+  .upcoming-wrapper{
+  margin-left:-10px;
+  margin-right:-10px;
+}
 }
 
 </style>
