@@ -248,9 +248,14 @@ body{
 
 .month-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
-  gap:32px;
-  justify-content:start;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:28px;
+}
+
+@media (min-width:1200px){
+  .month-grid{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
 }
 
 .month-section{
