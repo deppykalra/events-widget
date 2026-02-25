@@ -26,17 +26,66 @@ body{
 .upcoming-wrapper{
   background:white;
   border-radius:14px;
-  padding:10px 16px 6px;
-
-  margin-left:-16px;
-  margin-right:-16px;
-
-  margin-bottom:14px;
+  padding:10px 12px 6px;
+  margin-bottom:18px;
   box-shadow:0 4px 14px rgba(0,0,0,.06);
   position:sticky;
   top:6px;
   z-index:5;
+  transition:all .28s cubic-bezier(.4,0,.2,1);
 }
+
+.upcoming-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.upcoming-title{
+  font-size:15px;
+  font-weight:700;
+}
+
+.upcoming-sub{
+  font-size:11px;
+  color:#888;
+}
+
+.upcoming-scroll{
+  position:relative;
+}
+
+.upcoming-scroll::before,
+.upcoming-scroll::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:20px;
+  pointer-events:none;
+  z-index:2;
+}
+
+.upcoming-scroll::before{
+  left:0;
+  background:linear-gradient(to right, white, transparent);
+}
+
+.upcoming-scroll::after{
+  right:0;
+  background:linear-gradient(to left, white, transparent);
+}
+
+#upcoming-bar{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  scroll-snap-type:x mandatory;
+}
+
+#upcoming-bar::-webkit-scrollbar{ display:none; }
 
 /* FILTER BAR */
 
@@ -47,7 +96,7 @@ body{
   padding:8px 2px 4px;
   position:relative;
 }
-.filters::-webkit-scrollbar{ display:none; }
+.filters::-webkit-scrollbar{display:none;}
 
 .filters::after{
   content:"";
@@ -69,6 +118,7 @@ body{
   font-size:13px;
   cursor:pointer;
   white-space:nowrap;
+  transition:.18s;
 }
 
 .filter-btn.active{
@@ -76,19 +126,12 @@ body{
   color:white;
 }
 
-/* UPCOMING SCROLL */
-
-#upcoming-bar{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding-bottom:6px;
-}
-#upcoming-bar::-webkit-scrollbar{ display:none; }
+.filter-btn:active{ transform:scale(.94); }
 
 /* DATE PILLS */
 
 .up-event{
+  scroll-snap-align:start;
   min-width:60px;
   border-radius:12px;
   background:#111;
@@ -97,19 +140,26 @@ body{
   padding:8px 4px;
   cursor:pointer;
   transition:.18s;
+  transform:scale(.98);
 }
+
+.up-event:active{ transform:scale(.92); }
 
 .up-event.active{
   background:#ffd000;
   color:black;
+  transform:scale(1);
 }
 
 .up-date{
   font-size:16px;
   font-weight:800;
 }
+
 .up-month{
   font-size:10px;
+  margin-top:2px;
+  opacity:.85;
 }
 
 /* CARDS */
@@ -120,9 +170,16 @@ body{
   overflow:hidden;
   margin-bottom:20px;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
+  transition:.2s;
   display:flex;
   flex-direction:column;
   max-width:520px;
+  width:100%;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 26px rgba(0,0,0,.12);
 }
 
 .img{
@@ -132,7 +189,7 @@ body{
 }
 
 .content{
-  padding:20px;
+  padding:20px 20px 18px;
   display:flex;
   flex-direction:column;
   flex:1;
@@ -147,23 +204,41 @@ body{
 .meta{
   color:#666;
   font-size:14px;
+  margin-bottom:3px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  background:#ff4d4f;
+  color:white;
+  font-size:12px;
+  border-radius:6px;
+  margin-top:8px;
 }
 
 .btn{
   margin-top:auto;
+  display:block;
+  text-align:center;
   padding:12px;
   background:black;
   color:white;
   border-radius:10px;
   text-decoration:none;
-  text-align:center;
+  font-size:14px;
+  transition:.18s ease;
 }
 
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
-  gap:32px;
+@media (hover:hover){
+  .card:hover .btn{
+    background:#ffd000;
+    color:black;
+    transform:translateY(-1px);
+  }
 }
+
+/* MONTHS */
 
 .month-title{
   font-size:28px;
@@ -171,12 +246,47 @@ body{
   font-weight:800;
 }
 
-@media(max-width:600px){
-  .month-grid{display:block;}
-  .upcoming-wrapper{
-  margin-left:-10px;
-  margin-right:-10px;
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
+  gap:32px;
+  justify-content:start;
 }
+
+.month-section{
+  margin-bottom:60px;
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+  body{ padding:10px; }
+
+  .month-grid{ display:block; }
+
+  .card{ margin-bottom:22px; }
+
+  .month-title{
+    font-size:22px;
+    margin:30px 0 14px;
+  }
+
+  .upcoming-sub{ display:none; }
+
+  .upcoming-wrapper.shrink{
+    padding:6px 10px 4px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+
+  .upcoming-wrapper.shrink .up-event{
+    min-width:54px;
+    padding:6px 4px;
+  }
+
+  .upcoming-wrapper.shrink .up-date{ font-size:14px; }
+  .upcoming-wrapper.shrink .up-month{ font-size:9px; }
 }
 
 </style>
@@ -185,15 +295,21 @@ body{
 <body>
 
 <div class="upcoming-wrapper">
-  <div style="font-weight:700;margin-bottom:6px;">Upcoming Events</div>
-  <div id="upcoming-bar"></div>
+  <div class="upcoming-header">
+    <div class="upcoming-title">Upcoming Events</div>
+    <div class="upcoming-sub">Tap a date</div>
+  </div>
+
+  <div class="upcoming-scroll">
+    <div id="upcoming-bar"></div>
+  </div>
+
   <div class="filters" id="filters"></div>
 </div>
 
 <div class="container" id="events">Loading events...</div>
 
 <script>
-
 fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 .then(r=>r.json())
 .then(data=>{
@@ -204,8 +320,6 @@ const filtersBar=document.getElementById("filters");
 
 const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
 
-/* CATEGORY */
-
 function detectCategory(ev){
   const t=(ev.title+" "+(ev.venue||"")).toLowerCase();
   if(t.includes("workshop")) return "workshop";
@@ -215,8 +329,6 @@ function detectCategory(ev){
 }
 events.forEach(e=>e.category=detectCategory(e));
 
-/* FILTERS */
-
 const counts={};
 events.forEach(e=>counts[e.category]=(counts[e.category]||0)+1);
 const categories=["all",...Object.keys(counts)];
@@ -225,8 +337,7 @@ filtersBar.innerHTML=categories.map(cat=>{
   const label=cat==="all"?"All":cat[0].toUpperCase()+cat.slice(1);
   const count=cat==="all"?events.length:counts[cat];
   return `<button class="filter-btn ${cat==="all"?"active":""}" data-filter="${cat}">
-            ${label} (${count})
-          </button>`;
+  ${label} (${count})</button>`;
 }).join("");
 
 requestAnimationFrame(()=>{
@@ -234,12 +345,9 @@ requestAnimationFrame(()=>{
     filtersBar.style.setProperty("--fade","0");
 });
 
-/* UPCOMING BUILDER */
-
 function buildUpcoming(list){
 
 upcomingBar.innerHTML="";
-
 const map=new Map();
 
 list.forEach(ev=>{
@@ -253,12 +361,10 @@ list.forEach(ev=>{
 const upcoming=[...map.values()].slice(0,21);
 
 let first=true;
-
 const today=new Date(); today.setHours(0,0,0,0);
 const tomorrow=new Date(today); tomorrow.setDate(today.getDate()+1);
 
 upcoming.forEach(ev=>{
-
   const d=new Date(ev.starts_at);
   const day=new Date(d); day.setHours(0,0,0,0);
 
@@ -278,10 +384,9 @@ upcoming.forEach(ev=>{
   }
 
   box.innerHTML=`
-    <div style="font-size:11px;opacity:.7">${top}</div>
-    <div class="up-date">${mid}</div>
-    <div class="up-month">${bot}</div>
-  `;
+  <div style="font-size:11px;opacity:.7">${top}</div>
+  <div class="up-date">${mid}</div>
+  <div class="up-month">${bot}</div>`;
 
   box.onclick=()=>{
     document.querySelectorAll(".up-event").forEach(e=>e.classList.remove("active"));
@@ -299,10 +404,7 @@ upcoming.forEach(ev=>{
 });
 }
 
-/* INITIAL BUILD */
 buildUpcoming(events);
-
-/* FILTER CLICK */
 
 filtersBar.onclick=e=>{
   if(!e.target.classList.contains("filter-btn")) return;
@@ -312,7 +414,7 @@ filtersBar.onclick=e=>{
 
   const f=e.target.dataset.filter;
 
-  const filtered = f==="all"
+  const filtered=f==="all"
     ? events
     : events.filter(ev=>ev.category===f);
 
@@ -344,7 +446,6 @@ events.forEach(ev=>{
 container.innerHTML="";
 
 Object.keys(grouped).forEach(month=>{
-
   const section=document.createElement("div");
   section.className="month-section";
 
@@ -354,7 +455,6 @@ Object.keys(grouped).forEach(month=>{
   const grid=section.querySelector(".month-grid");
 
   grouped[month].forEach(ev=>{
-
     const start=new Date(ev.starts_at);
 
     const date=start.toLocaleString(undefined,{
@@ -371,19 +471,26 @@ Object.keys(grouped).forEach(month=>{
     card.dataset.category=ev.category;
 
     card.innerHTML=`
-      ${ev.image_url?`<img src="${ev.image_url}" class="img">`:""}
-      <div class="content">
-        <div class="title">${ev.title}</div>
-        <div class="meta">${date}</div>
-        ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
-        <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
-      </div>
-    `;
+    ${ev.image_url?`<img src="${ev.image_url}" class="img" loading="lazy">`:""}
+    <div class="content">
+      <div class="title">${ev.title}</div>
+      <div class="meta">${date}</div>
+      ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
+      <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
+    </div>`;
 
     grid.appendChild(card);
   });
 });
+});
+</script>
 
+<script>
+const bar=document.querySelector(".upcoming-wrapper");
+window.addEventListener("scroll",()=>{
+  if(window.innerWidth<=600){
+    window.scrollY>60?bar.classList.add("shrink"):bar.classList.remove("shrink");
+  }
 });
 </script>
 
