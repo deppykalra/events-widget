@@ -293,8 +293,10 @@ body{
 </head>
 
 <body>
-
+<div id="scroll-sentinel"></div>
 <div class="upcoming-wrapper">
+
+
   <div class="upcoming-header">
     <div class="upcoming-title">Upcoming Events</div>
     <div class="upcoming-sub">Tap a date</div>
@@ -487,11 +489,22 @@ Object.keys(grouped).forEach(month=>{
 
 <script>
 const bar=document.querySelector(".upcoming-wrapper");
-window.addEventListener("scroll",()=>{
-  if(window.innerWidth<=600){
-    window.scrollY>60?bar.classList.add("shrink"):bar.classList.remove("shrink");
-  }
-});
+const sentinel=document.getElementById("scroll-sentinel");
+
+const observer=new IntersectionObserver(
+  ([e])=>{
+    if(window.innerWidth<=600){
+      if(e.isIntersecting){
+        bar.classList.remove("shrink");
+      } else {
+        bar.classList.add("shrink");
+      }
+    }
+  },
+  {threshold:0}
+);
+
+observer.observe(sentinel);
 </script>
 
 </body>
