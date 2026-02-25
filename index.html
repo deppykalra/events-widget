@@ -56,7 +56,6 @@ body{
   pointer-events:none;
   background:linear-gradient(to left, white, transparent);
   opacity:var(--fade,1);
-  transition:.2s;
 }
 
 .filter-btn{
@@ -67,7 +66,6 @@ body{
   font-size:13px;
   cursor:pointer;
   white-space:nowrap;
-  transition:.18s;
 }
 
 .filter-btn.active{
@@ -75,67 +73,19 @@ body{
   color:white;
 }
 
-.filter-btn:active{ transform:scale(.94); }
-
-/* HEADER */
-
-.upcoming-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
-
-.upcoming-title{
-  font-size:15px;
-  font-weight:700;
-}
-
-.upcoming-sub{
-  font-size:11px;
-  color:#888;
-}
-
 /* UPCOMING SCROLL */
-
-.upcoming-scroll{
-  position:relative;
-}
-
-.upcoming-scroll::before,
-.upcoming-scroll::after{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:20px;
-  pointer-events:none;
-  z-index:2;
-}
-
-.upcoming-scroll::before{
-  left:0;
-  background:linear-gradient(to right, white, transparent);
-}
-
-.upcoming-scroll::after{
-  right:0;
-  background:linear-gradient(to left, white, transparent);
-}
 
 #upcoming-bar{
   display:flex;
   gap:12px;
   overflow-x:auto;
   padding-bottom:6px;
-  scroll-snap-type:x mandatory;
 }
 #upcoming-bar::-webkit-scrollbar{ display:none; }
 
 /* DATE PILLS */
 
 .up-event{
-  scroll-snap-align:start;
   min-width:60px;
   border-radius:12px;
   background:#111;
@@ -144,14 +94,11 @@ body{
   padding:8px 4px;
   cursor:pointer;
   transition:.18s;
-  transform:scale(.98);
 }
-.up-event:active{ transform:scale(.92); }
 
 .up-event.active{
   background:#ffd000;
   color:black;
-  transform:scale(1);
 }
 
 .up-date{
@@ -160,8 +107,6 @@ body{
 }
 .up-month{
   font-size:10px;
-  margin-top:2px;
-  opacity:.85;
 }
 
 /* CARDS */
@@ -172,16 +117,9 @@ body{
   overflow:hidden;
   margin-bottom:20px;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
-  transition:.2s;
   display:flex;
   flex-direction:column;
   max-width:520px;
-  width:100%;
-}
-
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 26px rgba(0,0,0,.12);
 }
 
 .img{
@@ -191,7 +129,7 @@ body{
 }
 
 .content{
-  padding:20px 20px 18px;
+  padding:20px;
   display:flex;
   flex-direction:column;
   flex:1;
@@ -206,41 +144,23 @@ body{
 .meta{
   color:#666;
   font-size:14px;
-  margin-bottom:3px;
-}
-
-.badge{
-  display:inline-block;
-  padding:4px 8px;
-  background:#ff4d4f;
-  color:white;
-  font-size:12px;
-  border-radius:6px;
-  margin-top:8px;
 }
 
 .btn{
   margin-top:auto;
-  display:block;
-  text-align:center;
   padding:12px;
   background:black;
   color:white;
   border-radius:10px;
   text-decoration:none;
-  font-size:14px;
-  transition:.18s ease;
+  text-align:center;
 }
 
-@media (hover:hover){
-  .card:hover .btn{
-    background:#ffd000;
-    color:black;
-    transform:translateY(-1px);
-  }
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
+  gap:32px;
 }
-
-/* MONTHS */
 
 .month-title{
   font-size:28px;
@@ -248,47 +168,8 @@ body{
   font-weight:800;
 }
 
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,520px));
-  gap:32px;
-  justify-content:start;
-}
-
-.month-section{
-  margin-bottom:60px;
-}
-
-/* MOBILE */
-
-@media (max-width:600px){
-
-  body{ padding:10px; }
-
-  .month-grid{ display:block; }
-
-  .card{ margin-bottom:22px; }
-
-  .month-title{
-    font-size:22px;
-    margin:30px 0 14px;
-  }
-
-  .upcoming-sub{ display:none; }
-
-  .upcoming-wrapper.shrink{
-    padding:6px 10px 4px;
-    border-radius:10px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-  }
-
-  .upcoming-wrapper.shrink .up-event{
-    min-width:54px;
-    padding:6px 4px;
-  }
-
-  .upcoming-wrapper.shrink .up-date{ font-size:14px; }
-  .upcoming-wrapper.shrink .up-month{ font-size:9px; }
+@media(max-width:600px){
+  .month-grid{display:block;}
 }
 
 </style>
@@ -297,23 +178,15 @@ body{
 <body>
 
 <div class="upcoming-wrapper">
-
-  <div class="upcoming-header">
-    <div class="upcoming-title">Upcoming Events</div>
-    <div class="upcoming-sub">Tap a date</div>
-  </div>
-
-  <div class="upcoming-scroll">
-    <div id="upcoming-bar"></div>
-  </div>
-
+  <div style="font-weight:700;margin-bottom:6px;">Upcoming Events</div>
+  <div id="upcoming-bar"></div>
   <div class="filters" id="filters"></div>
-
 </div>
 
 <div class="container" id="events">Loading events...</div>
 
 <script>
+
 fetch("https://fienta.com/api/v1/public/events?organizer=27119")
 .then(r=>r.json())
 .then(data=>{
@@ -354,31 +227,15 @@ requestAnimationFrame(()=>{
     filtersBar.style.setProperty("--fade","0");
 });
 
-filtersBar.onclick=e=>{
-  if(!e.target.classList.contains("filter-btn")) return;
+/* UPCOMING BUILDER */
 
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  e.target.classList.add("active");
-  e.target.scrollIntoView({inline:"center",behavior:"smooth"});
+function buildUpcoming(list){
 
-  const f=e.target.dataset.filter;
-
-  document.querySelectorAll(".card").forEach(card=>{
-    const show=f==="all"||card.dataset.category===f;
-    card.style.display=show?"":"none";
-  });
-
-  document.querySelectorAll(".month-section").forEach(section=>{
-    const visible=[...section.querySelectorAll(".card")]
-      .some(c=>c.style.display!=="none");
-    section.style.display=visible?"":"none";
-  });
-};
-
-/* UPCOMING DAYS */
+upcomingBar.innerHTML="";
 
 const map=new Map();
-events.forEach(ev=>{
+
+list.forEach(ev=>{
   const d=new Date(ev.starts_at);
   if(d>new Date()){
     const key=d.toDateString();
@@ -389,40 +246,34 @@ events.forEach(ev=>{
 const upcoming=[...map.values()].slice(0,21);
 
 let first=true;
+
 const today=new Date(); today.setHours(0,0,0,0);
 const tomorrow=new Date(today); tomorrow.setDate(today.getDate()+1);
 
 upcoming.forEach(ev=>{
+
   const d=new Date(ev.starts_at);
+  const day=new Date(d); day.setHours(0,0,0,0);
 
   const box=document.createElement("div");
   box.className="up-event";
 
-  const day=new Date(d); day.setHours(0,0,0,0);
+  let top=d.toLocaleString("default",{weekday:"short"});
+  let mid=d.getDate();
+  let bot=d.toLocaleString("default",{month:"short"});
 
-let top=d.toLocaleString("default",{weekday:"short"});
-let mid=d.getDate();
-let bot=d.toLocaleString("default",{month:"short"});
+  if(day.getTime()===today.getTime()) top="Today";
+  else if(day.getTime()===tomorrow.getTime()) top="Tomorrow";
 
-if(day.getTime()===today.getTime()){
-  top="Today";
-}
-else if(day.getTime()===tomorrow.getTime()){
-  top="Tomorrow";
-}
-
-  if(day.getTime()===today.getTime()){
-    box.classList.add("active");
-    first=false;
-  } else if(first){
+  if(first){
     box.classList.add("active");
     first=false;
   }
 
   box.innerHTML=`
     <div style="font-size:11px;opacity:.7">${top}</div>
-    ${mid?`<div class="up-date">${mid}</div>`:""}
-    ${bot?`<div class="up-month">${bot}</div>`:""}
+    <div class="up-date">${mid}</div>
+    <div class="up-month">${bot}</div>
   `;
 
   box.onclick=()=>{
@@ -439,10 +290,43 @@ else if(day.getTime()===tomorrow.getTime()){
 
   upcomingBar.appendChild(box);
 });
+}
+
+/* INITIAL BUILD */
+buildUpcoming(events);
+
+/* FILTER CLICK */
+
+filtersBar.onclick=e=>{
+  if(!e.target.classList.contains("filter-btn")) return;
+
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  e.target.classList.add("active");
+
+  const f=e.target.dataset.filter;
+
+  const filtered = f==="all"
+    ? events
+    : events.filter(ev=>ev.category===f);
+
+  buildUpcoming(filtered);
+
+  document.querySelectorAll(".card").forEach(card=>{
+    const show=f==="all"||card.dataset.category===f;
+    card.style.display=show?"":"none";
+  });
+
+  document.querySelectorAll(".month-section").forEach(section=>{
+    const visible=[...section.querySelectorAll(".card")]
+      .some(c=>c.style.display!=="none");
+    section.style.display=visible?"":"none";
+  });
+};
 
 /* GROUP BY MONTH */
 
 const grouped={};
+
 events.forEach(ev=>{
   const d=new Date(ev.starts_at);
   const key=d.toLocaleString("default",{month:"long",year:"numeric"});
@@ -453,21 +337,26 @@ events.forEach(ev=>{
 container.innerHTML="";
 
 Object.keys(grouped).forEach(month=>{
+
   const section=document.createElement("div");
   section.className="month-section";
+
   section.innerHTML=`<h2 class="month-title">${month}</h2><div class="month-grid"></div>`;
   container.appendChild(section);
 
   const grid=section.querySelector(".month-grid");
 
   grouped[month].forEach(ev=>{
+
     const start=new Date(ev.starts_at);
 
     const date=start.toLocaleString(undefined,{
-      weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"
+      weekday:"short",
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
     });
-
-    const soldOut=ev.sale_status!=="onSale";
 
     const card=document.createElement("div");
     card.className="card";
@@ -475,12 +364,11 @@ Object.keys(grouped).forEach(month=>{
     card.dataset.category=ev.category;
 
     card.innerHTML=`
-      ${ev.image_url?`<img src="${ev.image_url}" class="img" loading="lazy">`:""}
+      ${ev.image_url?`<img src="${ev.image_url}" class="img">`:""}
       <div class="content">
         <div class="title">${ev.title}</div>
         <div class="meta">${date}</div>
         ${ev.venue?`<div class="meta">${ev.venue}</div>`:""}
-        ${soldOut?`<div class="badge">Sold Out</div>`:""}
         <a href="${ev.buy_tickets_url}" target="_blank" class="btn">View Event</a>
       </div>
     `;
@@ -488,15 +376,7 @@ Object.keys(grouped).forEach(month=>{
     grid.appendChild(card);
   });
 });
-});
-</script>
 
-<script>
-const bar=document.querySelector(".upcoming-wrapper");
-window.addEventListener("scroll",()=>{
-  if(window.innerWidth<=600){
-    window.scrollY>60?bar.classList.add("shrink"):bar.classList.remove("shrink");
-  }
 });
 </script>
 
