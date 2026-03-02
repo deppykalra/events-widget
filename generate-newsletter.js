@@ -41,43 +41,38 @@ const html=`
 
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
-  background:#eef1f4;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;
+  background:#111;
 }
 
-.wrapper{
+.container{
   max-width:720px;
   margin:auto;
   background:white;
-  padding:40px;
 }
 
 /* HEADER */
 
 .header{
-  text-align:center;
-  border-bottom:4px solid #ffd000;
-  padding-bottom:18px;
+  background:#000;
+  color:white;
+  padding:40px 30px;
 }
 
-.title{
-  font-size:34px;
+.header h1{
   margin:0;
-  font-weight:800;
+  font-size:36px;
 }
 
 .range{
-  color:#666;
+  opacity:.7;
   margin-top:6px;
 }
 
 /* HERO */
 
 .hero{
-  margin:30px 0;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 12px 40px rgba(0,0,0,.12);
+  position:relative;
 }
 
 .hero img{
@@ -85,13 +80,49 @@ body{
   display:block;
 }
 
-.hero-content{
-  padding:22px;
+.hero-title{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:30px;
+  color:white;
+  font-size:28px;
+  font-weight:700;
+  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
-.hero-title{
-  font-size:24px;
-  margin:0 0 8px;
+/* SECTION */
+
+.section{
+  padding:30px;
+}
+
+.section h2{
+  margin:0 0 20px;
+}
+
+/* CARD */
+
+.card{
+  display:flex;
+  gap:16px;
+  margin-bottom:18px;
+  padding:14px;
+  border-radius:12px;
+  background:#fafafa;
+}
+
+.card img{
+  width:120px;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.title{
+  font-weight:700;
+  margin-bottom:6px;
 }
 
 .meta{
@@ -99,49 +130,13 @@ body{
   font-size:14px;
 }
 
-/* LIST */
-
-.section-title{
-  font-size:22px;
-  margin:40px 0 14px;
-}
-
-.card{
-  display:flex;
-  gap:16px;
-  padding:16px;
-  border-radius:14px;
-  border:1px solid #eee;
-  margin-bottom:16px;
-}
-
-.card img{
-  width:130px;
-  height:90px;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.card h3{
-  margin:0 0 6px;
-  font-size:18px;
-}
-
-/* EMPTY */
-
-.empty{
-  padding:40px;
-  text-align:center;
-  color:#777;
-}
-
 /* FOOTER */
 
 .footer{
-  margin-top:50px;
   text-align:center;
+  padding:26px;
   font-size:13px;
-  color:#777;
+  color:#999;
 }
 
 </style>
@@ -149,50 +144,42 @@ body{
 
 <body>
 
-<div class="wrapper">
+<div class="container">
 
 <div class="header">
-<div class="title">Impact Warsaw Events</div>
+<h1>Impact Warsaw</h1>
 <div class="range">
-${now.toDateString()} — ${week.toDateString()}
+Weekly Events — ${now.toDateString()} → ${week.toDateString()}
 </div>
 </div>
 
 ${
-events.length
-? `
+events[0] ? `
 <div class="hero">
-<img src="${events[0].image_url || ""}">
-<div class="hero-content">
+<img src="${events[0].image_url}">
 <div class="hero-title">${events[0].title}</div>
-<div class="meta">
-${formatDate(events[0].starts_at)}
-${events[0].venue ? " • "+events[0].venue : ""}
 </div>
-</div>
-</div>
+` : ""
+}
 
-<div class="section-title">Upcoming This Week</div>
+<div class="section">
 
-${events.slice(1).map(e=>`
+<h2>This Week</h2>
+
+${events.map(e=>`
 <div class="card">
-<img src="${e.image_url || ""}">
+<img src="${e.image_url}">
 <div>
-<h3>${e.title}</h3>
+<div class="title">${e.title}</div>
 <div class="meta">
-${formatDate(e.starts_at)}
+${new Date(e.starts_at).toLocaleString()}
 ${e.venue ? " • "+e.venue : ""}
 </div>
 </div>
 </div>
 `).join("")}
-`
-: `
-<div class="empty">
-No events scheduled this week.
+
 </div>
-`
-}
 
 <div class="footer">
 impactwarsaw.com
