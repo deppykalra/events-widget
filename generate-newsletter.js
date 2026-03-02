@@ -10,7 +10,7 @@ const now=new Date();
 const week=new Date();
 week.setDate(now.getDate()+7);
 
-/* FILTER UPCOMING WEEK EVENTS */
+/* FILTER WEEK EVENTS */
 
 const events=json.events
 .filter(e=>{
@@ -19,10 +19,22 @@ const events=json.events
 })
 .sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
 
-/* FORMATTERS */
+/* FEATURED LOGIC = FIRST COMEDY */
 
-function formatDate(date){
-  return new Date(date).toLocaleString(undefined,{
+let featured = events.find(e =>
+  e.title.toLowerCase().includes("comedy")
+);
+
+if(!featured && events.length){
+  featured = events[0];
+}
+
+const rest = events.filter(e=>e!==featured);
+
+/* DATE FORMAT */
+
+function formatDate(d){
+  return new Date(d).toLocaleString(undefined,{
     weekday:"short",
     day:"numeric",
     month:"short",
@@ -31,7 +43,7 @@ function formatDate(date){
   });
 }
 
-/* HTML TEMPLATE */
+/* TEMPLATE */
 
 const html=`
 <html>
@@ -48,10 +60,10 @@ body{
 
 .wrapper{
   max-width:760px;
-  margin:40px auto;
-  padding:50px;
+  margin:30px auto;
+  padding:40px;
   background:#18191c;
-  border-radius:20px;
+  border-radius:18px;
   box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
@@ -59,85 +71,109 @@ body{
 
 .header{
   text-align:center;
-  margin-bottom:50px;
+  margin-bottom:36px;
 }
 
 .logo{
-  width:170px;
-  margin-bottom:26px;
+  width:150px;
+  margin-bottom:18px;
 }
 
 .divider{
-  width:70px;
+  width:60px;
   height:4px;
   background:#ffd000;
-  margin:26px auto;
+  margin:18px auto;
 }
 
 .title{
-  font-size:34px;
+  font-size:28px;
   font-weight:800;
   letter-spacing:1px;
 }
 
 .range{
-  margin-top:10px;
+  margin-top:8px;
   color:#aaa;
-  font-size:15px;
+  font-size:14px;
 }
 
-/* SECTION TITLE */
+/* FEATURED */
+
+.featured{
+  margin:35px 0 45px;
+  background:#222327;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,.6);
+}
+
+.featured img{
+  width:100%;
+  display:block;
+}
+
+.featured-content{
+  padding:24px;
+}
+
+.featured-title{
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.meta{
+  color:#bbb;
+  font-size:14px;
+}
+
+/* SECTION */
 
 .section-title{
-  font-size:18px;
+  color:#ffd000;
+  font-size:17px;
   letter-spacing:2px;
   margin-bottom:26px;
-  color:#ffd000;
 }
 
-/* EVENT CARD */
+/* EVENT ROW */
 
 .event{
   display:flex;
-  gap:22px;
-  margin-bottom:20px;
+  gap:20px;
   padding:18px;
-  border-radius:16px;
+  margin-bottom:18px;
+  border-radius:14px;
   background:#222327;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .event img{
-  width:150px;
-  height:100px;
+  width:140px;
+  height:95px;
   object-fit:cover;
   border-radius:10px;
 }
 
 .event-title{
-  font-size:19px;
+  font-size:18px;
   font-weight:700;
   margin-bottom:6px;
-}
-
-.meta{
-  color:#b7b7b7;
-  font-size:14px;
 }
 
 /* EMPTY */
 
 .empty{
-  padding:60px 0;
   text-align:center;
-  color:#888;
+  padding:60px 0;
+  color:#777;
 }
 
 /* FOOTER */
 
 .footer{
   margin-top:60px;
-  padding-top:26px;
+  padding-top:24px;
   border-top:1px solid rgba(255,255,255,.08);
   text-align:center;
   font-size:13px;
@@ -166,10 +202,32 @@ ${now.toDateString()} — ${week.toDateString()}
 </div>
 
 ${
-events.length ? `
-<div class="section-title">Lineup</div>
+featured ? `
+<div class="featured">
 
-${events.map(e=>`
+<img src="${featured.image_url}">
+
+<div class="featured-content">
+
+<div class="featured-title">
+${featured.title}
+</div>
+
+<div class="meta">
+${formatDate(featured.starts_at)}
+${featured.venue ? " • "+featured.venue : ""}
+</div>
+
+</div>
+</div>
+` : ""
+}
+
+${
+rest.length ? `
+<div class="section-title">LINEUP</div>
+
+${rest.map(e=>`
 <div class="event">
 
 <img src="${e.image_url}">
@@ -177,7 +235,7 @@ ${events.map(e=>`
 <div>
 <div class="event-title">${e.title}</div>
 <div class="meta">
-${new Date(e.starts_at).toLocaleString()}
+${formatDate(e.starts_at)}
 ${e.venue ? " • "+e.venue : ""}
 </div>
 </div>
@@ -198,6 +256,7 @@ impactwarsaw.com
 </body>
 </html>
 `;
+
 /* SAVE HTML */
 
 fs.writeFileSync("newsletter.html",html);
