@@ -168,7 +168,7 @@ body{
 
 <div class="header">
 
-<img class="logo" src="https://github.com/deppykalra/events-widget/blob/main/logo.jpeg">
+<img class="logo" src="https://raw.githubusercontent.com/deppykalra/events-widget/main/logo.jpeg">
 
 <div class="title">Weekly Events</div>
 
