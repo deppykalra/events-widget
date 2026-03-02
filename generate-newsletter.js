@@ -35,94 +35,82 @@ const html=`
 
 body{
   margin:0;
-  background:#0f0f10;
+  background:#f4f4f2;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:#111;
 }
 
-/* OUTER FRAME */
-
-.frame{
-  padding:60px 0;
-}
-
-/* MAIN CARD */
-
-.container{
-  max-width:760px;
-  margin:auto;
+.page{
+  max-width:780px;
+  margin:60px auto;
   background:white;
-  border-radius:22px;
-  padding:50px;
-  box-shadow:0 30px 80px rgba(0,0,0,.45);
+  padding:60px;
+  border:1px solid #e6e6e6;
 }
 
 /* HEADER */
 
 .header{
-  text-align:center;
-  margin-bottom:40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:50px;
 }
 
 .logo{
-  width:140px;
-  margin-bottom:18px;
+  width:120px;
+}
+
+.header-right{
+  text-align:right;
 }
 
 .title{
-  font-size:30px;
+  font-size:28px;
   font-weight:800;
   margin:0;
 }
 
 .range{
-  margin-top:8px;
-  color:#666;
+  margin-top:6px;
   font-size:14px;
-}
-
-.accent{
-  width:50px;
-  height:4px;
-  background:#ffd000;
-  margin:20px auto;
-  border-radius:4px;
+  color:#666;
 }
 
 /* SECTION */
 
 .section-title{
-  font-size:18px;
+  font-size:16px;
   font-weight:700;
-  margin:40px 0 24px;
-  color:#111;
+  letter-spacing:1px;
+  margin-bottom:30px;
+  border-bottom:2px solid #ffd000;
+  display:inline-block;
+  padding-bottom:6px;
 }
 
-/* EVENT */
+/* EVENT CARD */
 
 .event{
   display:flex;
-  gap:18px;
-  margin-bottom:24px;
-  padding-bottom:24px;
-  border-bottom:1px solid #eee;
-}
-
-.event:last-child{
-  border-bottom:none;
+  gap:20px;
+  padding:22px;
+  margin-bottom:22px;
+  border:1px solid #e8e8e8;
+  border-radius:12px;
 }
 
 .event img{
   width:150px;
   height:100px;
   object-fit:cover;
-  border-radius:12px;
+  border-radius:8px;
 }
 
 .event-title{
   font-size:18px;
   font-weight:700;
   margin-bottom:6px;
-  color:#111;
 }
 
 .meta{
@@ -131,14 +119,14 @@ body{
 }
 
 .footer{
-  margin-top:40px;
+  margin-top:60px;
   text-align:center;
   font-size:13px;
-  color:#888;
+  color:#999;
 }
 
 .empty{
-  padding:50px 0;
+  padding:60px 0;
   text-align:center;
   color:#777;
 }
@@ -148,17 +136,19 @@ body{
 
 <body>
 
-<div class="frame">
-
-<div class="container">
+<div class="page">
 
 <div class="header">
+
 <img class="logo" src="https://raw.githubusercontent.com/deppykalra/events-widget/main/logo.jpeg">
-<div class="accent"></div>
+
+<div class="header-right">
 <div class="title">This Week at Impact</div>
 <div class="range">
 ${now.toDateString()} — ${week.toDateString()}
 </div>
+</div>
+
 </div>
 
 ${
@@ -188,7 +178,6 @@ impactwarsaw.com
 </div>
 
 </div>
-</div>
 
 </body>
 </html>
@@ -208,10 +197,10 @@ await page.pdf({
   format:"A4",
   printBackground:true,
   margin:{
-    top:"20px",
-    bottom:"20px",
-    left:"20px",
-    right:"20px"
+    top:"30px",
+    bottom:"30px",
+    left:"30px",
+    right:"30px"
   }
 });
 
