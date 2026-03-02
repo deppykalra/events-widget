@@ -51,6 +51,7 @@ ${events.map(e=>{
 fs.writeFileSync("newsletter.html",html);
 
 const browser = await puppeteer.launch({
+  executablePath: "/home/codespace/.cache/puppeteer/chrome/linux-145.0.7632.77/chrome-linux64/chrome",
   args: ["--no-sandbox","--disable-setuid-sandbox"]
 });
 const page=await browser.newPage();
