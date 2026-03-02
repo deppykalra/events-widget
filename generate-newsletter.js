@@ -41,15 +41,18 @@ const html=`
 
 body{
   margin:0;
-  background:#0f0f10;
+  background:#111214;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   color:white;
 }
 
 .wrapper{
   max-width:760px;
-  margin:auto;
-  padding:60px 40px;
+  margin:40px auto;
+  padding:50px;
+  background:#18191c;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
 /* HEADER */
@@ -60,19 +63,19 @@ body{
 }
 
 .logo{
-  width:180px;
-  margin-bottom:30px;
+  width:170px;
+  margin-bottom:26px;
 }
 
 .divider{
-  width:60px;
+  width:70px;
   height:4px;
   background:#ffd000;
-  margin:25px auto;
+  margin:26px auto;
 }
 
 .title{
-  font-size:32px;
+  font-size:34px;
   font-weight:800;
   letter-spacing:1px;
 }
@@ -86,38 +89,39 @@ body{
 /* SECTION TITLE */
 
 .section-title{
-  font-size:20px;
-  text-transform:uppercase;
+  font-size:18px;
   letter-spacing:2px;
-  margin-bottom:30px;
+  margin-bottom:26px;
   color:#ffd000;
 }
 
-/* EVENT ROW */
+/* EVENT CARD */
 
 .event{
   display:flex;
   gap:22px;
-  margin-bottom:34px;
-  padding-bottom:28px;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:20px;
+  padding:18px;
+  border-radius:16px;
+  background:#222327;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .event img{
-  width:160px;
-  height:110px;
+  width:150px;
+  height:100px;
   object-fit:cover;
-  border-radius:12px;
+  border-radius:10px;
 }
 
 .event-title{
-  font-size:20px;
+  font-size:19px;
   font-weight:700;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
 
 .meta{
-  color:#bbb;
+  color:#b7b7b7;
   font-size:14px;
 }
 
@@ -126,15 +130,15 @@ body{
 .empty{
   padding:60px 0;
   text-align:center;
-  color:#777;
+  color:#888;
 }
 
 /* FOOTER */
 
 .footer{
   margin-top:60px;
-  padding-top:30px;
-  border-top:1px solid rgba(255,255,255,.1);
+  padding-top:26px;
+  border-top:1px solid rgba(255,255,255,.08);
   text-align:center;
   font-size:13px;
   color:#777;
