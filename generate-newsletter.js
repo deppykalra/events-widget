@@ -1,3 +1,4 @@
+console.log("NEW TEMPLATE RUNNING");
 import fs from "fs";
 import puppeteer from "puppeteer";
 
