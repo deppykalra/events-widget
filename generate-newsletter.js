@@ -197,7 +197,7 @@ await page.pdf({
   format:"A4",
   printBackground:true,
   margin:{
-    top:"30px",
+    top:"0px",
     bottom:"30px",
     left:"30px",
     right:"30px"
