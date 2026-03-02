@@ -35,17 +35,17 @@ const html=`
 
 body{
   margin:0;
-  background:#f4f4f2;
+  background:white;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   color:#111;
 }
 
+/* PAGE */
+
 .page{
   max-width:780px;
-  margin:60px auto;
-  background:white;
-  padding:60px;
-  border:1px solid #e6e6e6;
+  margin:0 auto;
+  padding:50px 60px 60px;
 }
 
 /* HEADER */
@@ -54,7 +54,7 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  margin-bottom:50px;
+  margin-bottom:42px;
 }
 
 .logo{
@@ -77,25 +77,25 @@ body{
   color:#666;
 }
 
-/* SECTION */
+/* SECTION TITLE */
 
 .section-title{
   font-size:16px;
   font-weight:700;
   letter-spacing:1px;
-  margin-bottom:30px;
+  margin-bottom:28px;
   border-bottom:2px solid #ffd000;
   display:inline-block;
   padding-bottom:6px;
 }
 
-/* EVENT CARD */
+/* EVENT */
 
 .event{
   display:flex;
   gap:20px;
-  padding:22px;
-  margin-bottom:22px;
+  padding:20px;
+  margin-bottom:20px;
   border:1px solid #e8e8e8;
   border-radius:12px;
 }
@@ -119,7 +119,7 @@ body{
 }
 
 .footer{
-  margin-top:60px;
+  margin-top:50px;
   text-align:center;
   font-size:13px;
   color:#999;
@@ -198,9 +198,9 @@ await page.pdf({
   printBackground:true,
   margin:{
     top:"0px",
-    bottom:"30px",
-    left:"30px",
-    right:"30px"
+    bottom:"0px",
+    left:"0px",
+    right:"0px"
   }
 });
 
