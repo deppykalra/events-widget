@@ -41,122 +41,103 @@ const html=`
 
 body{
   margin:0;
+  background:#0f0f10;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:#f5f7f9;
-  color:#111;
+  color:white;
 }
 
-.container{
-  max-width:720px;
+.wrapper{
+  max-width:760px;
   margin:auto;
-  background:white;
-  padding:50px;
-  box-shadow:0 8px 40px rgba(0,0,0,.08);
+  padding:60px 40px;
 }
 
 /* HEADER */
 
 .header{
   text-align:center;
-  margin-bottom:40px;
+  margin-bottom:50px;
 }
 
 .logo{
-  width:160px;
-  margin-bottom:20px;
+  width:180px;
+  margin-bottom:30px;
+}
+
+.divider{
+  width:60px;
+  height:4px;
+  background:#ffd000;
+  margin:25px auto;
 }
 
 .title{
-  font-size:34px;
+  font-size:32px;
   font-weight:800;
-  margin:0;
+  letter-spacing:1px;
 }
 
 .range{
-  margin-top:8px;
-  color:#777;
+  margin-top:10px;
+  color:#aaa;
   font-size:15px;
-}
-
-/* HERO */
-
-.hero{
-  margin:40px 0;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.12);
-}
-
-.hero img{
-  width:100%;
-  display:block;
-}
-
-.hero-content{
-  padding:26px;
-}
-
-.hero-title{
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:8px;
-}
-
-.meta{
-  color:#666;
-  font-size:14px;
 }
 
 /* SECTION TITLE */
 
 .section-title{
-  font-size:22px;
-  margin:40px 0 18px;
-  font-weight:700;
+  font-size:20px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:30px;
+  color:#ffd000;
 }
 
-/* EVENT CARD */
+/* EVENT ROW */
 
-.card{
+.event{
   display:flex;
-  gap:18px;
-  padding:18px;
-  margin-bottom:18px;
-  border-radius:16px;
-  background:#fafafa;
-  transition:.2s;
+  gap:22px;
+  margin-bottom:34px;
+  padding-bottom:28px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.card img{
-  width:140px;
-  height:95px;
+.event img{
+  width:160px;
+  height:110px;
   object-fit:cover;
   border-radius:12px;
 }
 
-.card-title{
+.event-title{
+  font-size:20px;
   font-weight:700;
-  font-size:17px;
-  margin-bottom:6px;
+  margin-bottom:8px;
+}
+
+.meta{
+  color:#bbb;
+  font-size:14px;
 }
 
 /* EMPTY */
 
 .empty{
-  text-align:center;
   padding:60px 0;
+  text-align:center;
   color:#777;
 }
 
 /* FOOTER */
 
 .footer{
+  margin-top:60px;
+  padding-top:30px;
+  border-top:1px solid rgba(255,255,255,.1);
   text-align:center;
-  margin-top:50px;
-  padding-top:20px;
-  border-top:1px solid #eee;
   font-size:13px;
-  color:#999;
+  color:#777;
 }
 
 </style>
@@ -164,13 +145,15 @@ body{
 
 <body>
 
-<div class="container">
+<div class="wrapper">
 
 <div class="header">
 
 <img class="logo" src="https://raw.githubusercontent.com/deppykalra/events-widget/main/logo.jpeg">
 
-<div class="title">Weekly Events</div>
+<div class="divider"></div>
+
+<div class="title">THIS WEEK AT IMPACT</div>
 
 <div class="range">
 ${now.toDateString()} — ${week.toDateString()}
@@ -180,36 +163,26 @@ ${now.toDateString()} — ${week.toDateString()}
 
 ${
 events.length ? `
-<div class="hero">
-<img src="${events[0].image_url}">
-<div class="hero-content">
-<div class="hero-title">${events[0].title}</div>
-<div class="meta">
-${new Date(events[0].starts_at).toLocaleString()}
-${events[0].venue ? " • "+events[0].venue : ""}
-</div>
-</div>
-</div>
+<div class="section-title">Lineup</div>
 
-<div class="section-title">Upcoming This Week</div>
+${events.map(e=>`
+<div class="event">
 
-${events.slice(1).map(e=>`
-<div class="card">
 <img src="${e.image_url}">
+
 <div>
-<div class="card-title">${e.title}</div>
+<div class="event-title">${e.title}</div>
 <div class="meta">
 ${new Date(e.starts_at).toLocaleString()}
 ${e.venue ? " • "+e.venue : ""}
 </div>
 </div>
+
 </div>
 `).join("")}
-` : `
-<div class="empty">
-No events scheduled this week
-</div>
 `
+:
+`<div class="empty">No events scheduled this week</div>`
 }
 
 <div class="footer">
