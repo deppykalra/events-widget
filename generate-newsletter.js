@@ -41,38 +41,50 @@ const html=`
 
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;
-  background:#111;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#f5f7f9;
+  color:#111;
 }
 
 .container{
   max-width:720px;
   margin:auto;
   background:white;
+  padding:50px;
+  box-shadow:0 8px 40px rgba(0,0,0,.08);
 }
 
 /* HEADER */
 
 .header{
-  background:#000;
-  color:white;
-  padding:40px 30px;
+  text-align:center;
+  margin-bottom:40px;
 }
 
-.header h1{
+.logo{
+  width:160px;
+  margin-bottom:20px;
+}
+
+.title{
+  font-size:34px;
+  font-weight:800;
   margin:0;
-  font-size:36px;
 }
 
 .range{
-  opacity:.7;
-  margin-top:6px;
+  margin-top:8px;
+  color:#777;
+  font-size:15px;
 }
 
 /* HERO */
 
 .hero{
-  position:relative;
+  margin:40px 0;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
 
 .hero img{
@@ -80,49 +92,14 @@ body{
   display:block;
 }
 
+.hero-content{
+  padding:26px;
+}
+
 .hero-title{
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:30px;
-  color:white;
-  font-size:28px;
+  font-size:24px;
   font-weight:700;
-  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
-}
-
-/* SECTION */
-
-.section{
-  padding:30px;
-}
-
-.section h2{
-  margin:0 0 20px;
-}
-
-/* CARD */
-
-.card{
-  display:flex;
-  gap:16px;
-  margin-bottom:18px;
-  padding:14px;
-  border-radius:12px;
-  background:#fafafa;
-}
-
-.card img{
-  width:120px;
-  height:80px;
-  object-fit:cover;
-  border-radius:8px;
-}
-
-.title{
-  font-weight:700;
-  margin-bottom:6px;
+  margin-bottom:8px;
 }
 
 .meta{
@@ -130,11 +107,54 @@ body{
   font-size:14px;
 }
 
+/* SECTION TITLE */
+
+.section-title{
+  font-size:22px;
+  margin:40px 0 18px;
+  font-weight:700;
+}
+
+/* EVENT CARD */
+
+.card{
+  display:flex;
+  gap:18px;
+  padding:18px;
+  margin-bottom:18px;
+  border-radius:16px;
+  background:#fafafa;
+  transition:.2s;
+}
+
+.card img{
+  width:140px;
+  height:95px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.card-title{
+  font-weight:700;
+  font-size:17px;
+  margin-bottom:6px;
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  padding:60px 0;
+  color:#777;
+}
+
 /* FOOTER */
 
 .footer{
   text-align:center;
-  padding:26px;
+  margin-top:50px;
+  padding-top:20px;
+  border-top:1px solid #eee;
   font-size:13px;
   color:#999;
 }
@@ -147,30 +167,37 @@ body{
 <div class="container">
 
 <div class="header">
-<h1>Impact Warsaw</h1>
+
+<img class="logo" src="https://github.com/deppykalra/events-widget/blob/main/logo.jpeg">
+
+<div class="title">Weekly Events</div>
+
 <div class="range">
-Weekly Events — ${now.toDateString()} → ${week.toDateString()}
+${now.toDateString()} — ${week.toDateString()}
 </div>
+
 </div>
 
 ${
-events[0] ? `
+events.length ? `
 <div class="hero">
 <img src="${events[0].image_url}">
+<div class="hero-content">
 <div class="hero-title">${events[0].title}</div>
+<div class="meta">
+${new Date(events[0].starts_at).toLocaleString()}
+${events[0].venue ? " • "+events[0].venue : ""}
 </div>
-` : ""
-}
+</div>
+</div>
 
-<div class="section">
+<div class="section-title">Upcoming This Week</div>
 
-<h2>This Week</h2>
-
-${events.map(e=>`
+${events.slice(1).map(e=>`
 <div class="card">
 <img src="${e.image_url}">
 <div>
-<div class="title">${e.title}</div>
+<div class="card-title">${e.title}</div>
 <div class="meta">
 ${new Date(e.starts_at).toLocaleString()}
 ${e.venue ? " • "+e.venue : ""}
@@ -178,8 +205,12 @@ ${e.venue ? " • "+e.venue : ""}
 </div>
 </div>
 `).join("")}
-
+` : `
+<div class="empty">
+No events scheduled this week
 </div>
+`
+}
 
 <div class="footer">
 impactwarsaw.com
@@ -190,7 +221,6 @@ impactwarsaw.com
 </body>
 </html>
 `;
-
 /* SAVE HTML */
 
 fs.writeFileSync("newsletter.html",html);
