@@ -10,28 +10,12 @@ const now=new Date();
 const week=new Date();
 week.setDate(now.getDate()+7);
 
-/* FILTER WEEK EVENTS */
-
 const events=json.events
 .filter(e=>{
   const d=new Date(e.starts_at);
   return d>=now && d<=week;
 })
 .sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
-
-/* FEATURED LOGIC = FIRST COMEDY */
-
-let featured = events.find(e =>
-  e.title.toLowerCase().includes("comedy")
-);
-
-if(!featured && events.length){
-  featured = events[0];
-}
-
-const rest = events.filter(e=>e!==featured);
-
-/* DATE FORMAT */
 
 function formatDate(d){
   return new Date(d).toLocaleString(undefined,{
@@ -43,8 +27,6 @@ function formatDate(d){
   });
 }
 
-/* TEMPLATE */
-
 const html=`
 <html>
 <head>
@@ -53,130 +35,111 @@ const html=`
 
 body{
   margin:0;
-  background:#111214;
+  background:#0f0f10;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  color:white;
 }
 
-.wrapper{
+/* OUTER FRAME */
+
+.frame{
+  padding:60px 0;
+}
+
+/* MAIN CARD */
+
+.container{
   max-width:760px;
-  margin:30px auto;
-  padding:40px;
-  background:#18191c;
-  border-radius:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  margin:auto;
+  background:white;
+  border-radius:22px;
+  padding:50px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
 }
 
 /* HEADER */
 
 .header{
   text-align:center;
-  margin-bottom:36px;
+  margin-bottom:40px;
 }
 
 .logo{
-  width:150px;
+  width:140px;
   margin-bottom:18px;
 }
 
-.divider{
-  width:60px;
-  height:4px;
-  background:#ffd000;
-  margin:18px auto;
-}
-
 .title{
-  font-size:28px;
+  font-size:30px;
   font-weight:800;
-  letter-spacing:1px;
+  margin:0;
 }
 
 .range{
   margin-top:8px;
-  color:#aaa;
+  color:#666;
   font-size:14px;
 }
 
-/* FEATURED */
-
-.featured{
-  margin:35px 0 45px;
-  background:#222327;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 10px 40px rgba(0,0,0,.6);
-}
-
-.featured img{
-  width:100%;
-  display:block;
-}
-
-.featured-content{
-  padding:24px;
-}
-
-.featured-title{
-  font-size:24px;
-  font-weight:800;
-  margin-bottom:10px;
-}
-
-.meta{
-  color:#bbb;
-  font-size:14px;
+.accent{
+  width:50px;
+  height:4px;
+  background:#ffd000;
+  margin:20px auto;
+  border-radius:4px;
 }
 
 /* SECTION */
 
 .section-title{
-  color:#ffd000;
-  font-size:17px;
-  letter-spacing:2px;
-  margin-bottom:26px;
+  font-size:18px;
+  font-weight:700;
+  margin:40px 0 24px;
+  color:#111;
 }
 
-/* EVENT ROW */
+/* EVENT */
 
 .event{
   display:flex;
-  gap:20px;
-  padding:18px;
-  margin-bottom:18px;
-  border-radius:14px;
-  background:#222327;
+  gap:18px;
+  margin-bottom:24px;
+  padding-bottom:24px;
+  border-bottom:1px solid #eee;
+}
+
+.event:last-child{
+  border-bottom:none;
 }
 
 .event img{
-  width:140px;
-  height:95px;
+  width:150px;
+  height:100px;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:12px;
 }
 
 .event-title{
   font-size:18px;
   font-weight:700;
   margin-bottom:6px;
+  color:#111;
 }
 
-/* EMPTY */
-
-.empty{
-  text-align:center;
-  padding:60px 0;
-  color:#777;
+.meta{
+  font-size:14px;
+  color:#666;
 }
-
-/* FOOTER */
 
 .footer{
-  margin-top:60px;
-  padding-top:24px;
-  border-top:1px solid rgba(255,255,255,.08);
+  margin-top:40px;
   text-align:center;
   font-size:13px;
+  color:#888;
+}
+
+.empty{
+  padding:50px 0;
+  text-align:center;
   color:#777;
 }
 
@@ -185,53 +148,27 @@ body{
 
 <body>
 
-<div class="wrapper">
+<div class="frame">
+
+<div class="container">
 
 <div class="header">
-
 <img class="logo" src="https://raw.githubusercontent.com/deppykalra/events-widget/main/logo.jpeg">
-
-<div class="divider"></div>
-
-<div class="title">THIS WEEK AT IMPACT</div>
-
+<div class="accent"></div>
+<div class="title">This Week at Impact</div>
 <div class="range">
 ${now.toDateString()} — ${week.toDateString()}
 </div>
-
 </div>
 
 ${
-featured ? `
-<div class="featured">
+events.length
+? `
+<div class="section-title">Lineup</div>
 
-<img src="${featured.image_url}">
-
-<div class="featured-content">
-
-<div class="featured-title">
-${featured.title}
-</div>
-
-<div class="meta">
-${formatDate(featured.starts_at)}
-${featured.venue ? " • "+featured.venue : ""}
-</div>
-
-</div>
-</div>
-` : ""
-}
-
-${
-rest.length ? `
-<div class="section-title">LINEUP</div>
-
-${rest.map(e=>`
+${events.map(e=>`
 <div class="event">
-
 <img src="${e.image_url}">
-
 <div>
 <div class="event-title">${e.title}</div>
 <div class="meta">
@@ -239,7 +176,6 @@ ${formatDate(e.starts_at)}
 ${e.venue ? " • "+e.venue : ""}
 </div>
 </div>
-
 </div>
 `).join("")}
 `
@@ -252,23 +188,19 @@ impactwarsaw.com
 </div>
 
 </div>
+</div>
 
 </body>
 </html>
 `;
 
-/* SAVE HTML */
-
 fs.writeFileSync("newsletter.html",html);
-
-/* GENERATE PDF */
 
 const browser=await puppeteer.launch({
   args:["--no-sandbox","--disable-setuid-sandbox"]
 });
 
 const page=await browser.newPage();
-
 await page.setContent(html,{waitUntil:"networkidle0"});
 
 await page.pdf({
@@ -284,5 +216,4 @@ await page.pdf({
 });
 
 await browser.close();
-
 console.log("PDF generated");
