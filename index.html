@@ -317,23 +317,36 @@ body{
 <div class="container" id="events">Loading events...</div>
 
 <script>
-fetch("https://fienta.com/api/v1/public/events?organizer=27119")
-.then(r=>r.json())
-.then(data=>{
+const organizers = [27119]; // ← put your organizer IDs here
 
-const container=document.getElementById("events");
-const upcomingBar=document.getElementById("upcoming-bar");
-const filtersBar=document.getElementById("filters");
+Promise.all(
+  organizers.map(id =>
+    fetch(`https://fienta.com/api/v1/public/events?organizer=${id}`)
+      .then(r => r.json())
+  )
+)
+.then(results => {
 
-const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
+  // 🔥 recreate the SAME structure as before
+  const data = {
+    events: results.flatMap(r => r.events)
+  };
 
-function detectCategory(ev){
-  const t=(ev.title+" "+(ev.venue||"")).toLowerCase();
-  if(t.includes("workshop")) return "workshop";
-  if(t.includes("improv")) return "improv";
-  if(t.includes("comedy")) return "comedy";
-  return "other";
-}
+  // ✅ THIS IS YOUR ORIGINAL CODE — unchanged
+
+  const container=document.getElementById("events");
+  const upcomingBar=document.getElementById("upcoming-bar");
+  const filtersBar=document.getElementById("filters");
+
+  const events=data.events.sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
+
+  function detectCategory(ev){
+    const t=(ev.title+" "+(ev.venue||"")).toLowerCase();
+    if(t.includes("workshop")) return "workshop";
+    if(t.includes("improv")) return "improv";
+    if(t.includes("comedy")) return "comedy";
+    return "other";
+  }
 events.forEach(e=>e.category=detectCategory(e));
 
 const counts={};
