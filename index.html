@@ -345,6 +345,7 @@ Promise.all(
     if(t.includes("workshop")) return "workshop";
     if(t.includes("improv")) return "improv";
     if(t.includes("comedy")) return "comedy";
+    if(t.includes("quiz")) return "quiz";
     return "other";
   }
 events.forEach(e=>e.category=detectCategory(e));
